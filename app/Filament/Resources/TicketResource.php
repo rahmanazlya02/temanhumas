@@ -83,6 +83,19 @@ class TicketResource extends Resource
                                     )
                                     ->default(fn() => request()->get('project'))
                                     ->required(),
+                                
+                                Forms\Components\Grid::make()
+                                    ->columns(12)
+                                    ->columnSpan(2)
+                                    ->schema([
+                                        Forms\Components\TextInput::make('name')
+                                            ->label(__('Ticket name'))
+                                            ->required()
+                                            ->columnSpan(
+                                                fn($livewire) => !($livewire instanceof CreateRecord) ? 10 : 12
+                                            )
+                                            ->maxLength(255),
+                                    ]),
 
                                 Forms\Components\Select::make('owner_id')
                                     ->label(__('Task owner'))
@@ -90,6 +103,7 @@ class TicketResource extends Resource
                                     ->options(fn() => User::all()->pluck('name', 'id')->toArray())
                                     ->default(fn() => auth()->user()->id)
                                     ->required(),
+
 
                                 Forms\Components\Select::make('responsible_id')
                                     ->label(__('Task responsible'))

@@ -21,7 +21,7 @@ class ProjectStatusResource extends Resource
 
     protected static function getNavigationLabel(): string
     {
-        return __('Project statuses');
+        return __('Project Status');
     }
 
     public static function getPluralLabel(): ?string

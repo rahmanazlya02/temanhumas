@@ -139,27 +139,6 @@ class ProjectResource extends Resource
             ])
             ->actions([
 
-                Tables\Actions\Action::make('favorite')
-                    ->label('')
-                    ->icon('heroicon-o-star')
-                    ->color(fn($record) => auth()->user()->favoriteProjects()
-                        ->where('projects.id', $record->id)->count() ? 'success' : 'default')
-                    ->action(function ($record) {
-                        $projectId = $record->id;
-                        $projectFavorite = ProjectFavorite::where('project_id', $projectId)
-                            ->where('user_id', auth()->user()->id)
-                            ->first();
-                        if ($projectFavorite) {
-                            $projectFavorite->delete();
-                        } else {
-                            ProjectFavorite::create([
-                                'project_id' => $projectId,
-                                'user_id' => auth()->user()->id
-                            ]);
-                        }
-                        Filament::notify('success', __('Project updated'));
-                    }),
-
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
 
