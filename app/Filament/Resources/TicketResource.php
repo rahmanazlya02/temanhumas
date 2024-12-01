@@ -77,14 +77,15 @@ class TicketResource extends Resource
                                             );
                                         }
                                     })
-                                    ->options(fn() => Project::where('owner_id', auth()->user()->id)
-                                        ->orWhereHas('users', function ($query) {
-                                            return $query->where('users.id', auth()->user()->id);
-                                        })->pluck('name', 'id')->toArray()
+                                    ->options(
+                                        fn() => Project::where('owner_id', auth()->user()->id)
+                                            ->orWhereHas('users', function ($query) {
+                                                return $query->where('users.id', auth()->user()->id);
+                                            })->pluck('name', 'id')->toArray()
                                     )
                                     ->default(fn() => request()->get('project'))
                                     ->required(),
-                                
+
                                 Forms\Components\TextInput::make('name')
                                     ->label(__('Task name'))
                                     ->required(),
@@ -159,17 +160,17 @@ class TicketResource extends Resource
                             ->label(__('Task Description'))
                             ->required()
                             ->columnSpan(2),
-                        
-                    Forms\Components\Grid::make()
-                        ->columns(3)
-                        ->columnSpan(2)
-                        ->schema([
-                            Forms\Components\DatePicker::make('deadline')
 
-                            ->label(__('Deadline'))
-                            ->required()
-                            ->reactive(),
-                        ]),
+                        Forms\Components\Grid::make()
+                            ->columns(3)
+                            ->columnSpan(2)
+                            ->schema([
+                                Forms\Components\DatePicker::make('deadline')
+
+                                    ->label(__('Deadline'))
+                                    ->required()
+                                    ->reactive(),
+                            ]),
                     ]),
             ]);
     }
