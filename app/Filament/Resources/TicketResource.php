@@ -20,6 +20,7 @@ use Filament\Resources\Resource;
 use Filament\Resources\Table;
 use Filament\Tables;
 use Illuminate\Support\HtmlString;
+use Illuminate\Database\Eloquent\Builder;
 
 class TicketResource extends Resource
 {
@@ -84,18 +85,9 @@ class TicketResource extends Resource
                                     ->default(fn() => request()->get('project'))
                                     ->required(),
                                 
-                                Forms\Components\Grid::make()
-                                    ->columns(12)
-                                    ->columnSpan(2)
-                                    ->schema([
-                                        Forms\Components\TextInput::make('name')
-                                            ->label(__('Ticket name'))
-                                            ->required()
-                                            ->columnSpan(
-                                                fn($livewire) => !($livewire instanceof CreateRecord) ? 10 : 12
-                                            )
-                                            ->maxLength(255),
-                                    ]),
+                                Forms\Components\TextInput::make('name')
+                                    ->label(__('Task name'))
+                                    ->required(),
 
                                 Forms\Components\Select::make('owner_id')
                                     ->label(__('Task owner'))
@@ -167,6 +159,17 @@ class TicketResource extends Resource
                             ->label(__('Task Description'))
                             ->required()
                             ->columnSpan(2),
+                        
+                    Forms\Components\Grid::make()
+                        ->columns(3)
+                        ->columnSpan(2)
+                        ->schema([
+                            Forms\Components\DatePicker::make('deadline')
+
+                            ->label(__('Deadline'))
+                            ->required()
+                            ->reactive(),
+                        ]),
                     ]),
             ]);
     }
@@ -230,6 +233,12 @@ class TicketResource extends Resource
                 ->sortable()
                 ->searchable(),
 
+            Tables\Columns\TextColumn::make('deadline')
+                ->label(__('Deadline'))
+                ->date() // Format sebagai tanggal
+                ->sortable()
+                ->searchable(),
+
             Tables\Columns\TextColumn::make('created_at')
                 ->label(__('Created at'))
                 ->dateTime()
@@ -276,6 +285,11 @@ class TicketResource extends Resource
                     ->label(__('Priority'))
                     ->multiple()
                     ->options(fn() => TicketPriority::all()->pluck('name', 'id')->toArray()),
+
+                Tables\Filters\SelectFilter::make('deadline')
+                    ->label('Deadline')
+                    ->multiple()
+                    ->options(fn() => Ticket::all()->pluck('deadline')->toArray()),
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),

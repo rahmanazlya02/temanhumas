@@ -6,6 +6,7 @@ use App\Filament\Resources\TicketResource;
 use Filament\Pages\Actions;
 use Filament\Resources\Pages\ListRecords;
 use Illuminate\Database\Eloquent\Builder;
+use Filament\Tables\Filters\Filter;
 
 class ListTickets extends ListRecords
 {

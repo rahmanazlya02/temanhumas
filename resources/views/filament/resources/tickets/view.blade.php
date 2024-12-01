@@ -11,11 +11,6 @@
         <x-filament::card class="md:w-2/3 w-full flex flex-col gap-5">
             <div class="w-full flex flex-col gap-0">
                 <div class="flex items-center gap-2">
-                    <span class="flex items-center gap-1 text-sm text-primary-500 font-medium">
-                        <x-heroicon-o-ticket class="w-4 h-4"/>
-                        {{ $record->code }}
-                    </span>
-                    <span class="text-sm text-gray-400 font-light">|</span>
                     <span class="flex items-center gap-1 text-sm text-gray-500">
                         {{ $record->project->name }}
                     </span>
@@ -43,7 +38,7 @@
             </div>
             <div class="w-full flex flex-col gap-0 pt-5">
                 <span class="text-gray-500 text-sm font-medium">
-                    {{ __('Content') }}
+                    {{ __('Description') }}
                 </span>
                 <div class="w-full prose">
                     {!! $record->content !!}
@@ -74,99 +69,15 @@
                 </div>
             </div>
 
-            @if($record->project->type === 'scrum')
-                <div class="w-full flex flex-col gap-1 pt-3">
-                    <span class="text-gray-500 text-sm font-medium">
-                        {{ __('Sprint') }}
+            <div class="w-full flex flex-col gap-1 pt-3">
+                <span class="text-gray-500 text-sm font-medium">
+                    {{ __('Deadline') }}
+                </span>
+                <div class="w-full text-gray-500">
+                    {{ $record->deadline }}
+                    <span class="text-xs text-gray-400">
+                        {{ $record->deadline }}
                     </span>
-                    <div class="w-full flex flex-col justify-center gap-1 text-gray-500">
-                        @if($record->sprint)
-                            {{ $record->sprint->name }}
-                            <span class="text-xs text-gray-400">
-                                {{ __('Starts at:') }} {{ $record->sprint->starts_at->format(__('Y-m-d')) }} -
-                                {{ __('Ends at:') }} {{ $record->sprint->ends_at->format(__('Y-m-d')) }}
-                            </span>
-                        @else
-                            -
-                        @endif
-                    </div>
-                </div>
-            @else
-                <div class="w-full flex flex-col gap-1 pt-3">
-                    <span class="text-gray-500 text-sm font-medium">
-                        {{ __('Epic') }}
-                    </span>
-                    <div class="w-full flex items-center gap-1 text-gray-500">
-                        @if($record->epic)
-                            {{ $record->epic->name }}
-                        @else
-                            -
-                        @endif
-                    </div>
-                </div>
-            @endif
-
-            <div class="w-full flex flex-col gap-1 pt-3">
-                <span class="text-gray-500 text-sm font-medium">
-                    {{ __('Estimation') }}
-                </span>
-                <div class="w-full flex items-center gap-1 text-gray-500">
-                    @if($record->estimation)
-                        {{ $record->estimationForHumans }}
-                    @else
-                        -
-                    @endif
-                </div>
-            </div>
-
-            <div class="w-full flex flex-col gap-1 pt-3">
-                <span class="text-gray-500 text-sm font-medium">
-                    {{ __('Total time logged') }}
-                </span>
-                @if($record->hours()->count())
-                    @if($record->estimation)
-                        <div class="flex justify-between mb-1">
-                            <span class="text-base font-medium
-                                         text-{{ $record->estimationProgress > 100 ? 'danger' : 'primary' }}-700
-                                         dark:text-white">
-                                {{ $record->totalLoggedHours }}
-                            </span>
-                            <span class="text-sm font-medium
-                                         text-{{ $record->estimationProgress > 100 ? 'danger' : 'primary' }}-700
-                                         dark:text-white">
-                            {{ round($record->estimationProgress) }}%
-                        </span>
-                        </div>
-                        <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
-                            <div class="bg-{{ $record->estimationProgress > 100 ? 'danger' : 'primary' }}-600
-                                        h-2.5 rounded-full"
-                                 style="width: {{ $record->estimationProgress > 100 ?
-                                                    100
-                                                    : $record->estimationProgress }}%">
-                            </div>
-                        </div>
-                    @else
-                        <div class="w-full flex items-center gap-1 text-gray-500">
-                            {{ $record->totalLoggedHours }}
-                        </div>
-                    @endif
-                @else
-                    -
-                @endif
-            </div>
-
-            <div class="w-full flex flex-col gap-1 pt-3">
-                <span class="text-gray-500 text-sm font-medium">
-                    {{ __('Subscribers') }}
-                </span>
-                <div class="w-full flex items-center gap-1 text-gray-500">
-                    @if($record->subscribers->count())
-                        @foreach($record->subscribers as $subscriber)
-                            <x-user-avatar :user="$subscriber"/>
-                        @endforeach
-                    @else
-                        {{ '-' }}
-                    @endif
                 </div>
             </div>
 
@@ -194,27 +105,21 @@
                 </div>
             </div>
 
-            @if($record->relations->count())
-                <div class="w-full flex flex-col gap-1 pt-3">
-                    <span class="text-gray-500 text-sm font-medium">
-                        {{ __('Ticket relations') }}
-                    </span>
-                    <div class="w-full text-gray-500">
-                        @foreach($record->relations as $relation)
-                            <div class="w-full flex items-center gap-1 text-xs">
-                                <span class="rounded px-2 py-1 text-white
-                                             bg-{{ config('system.tickets.relations.colors.' . $relation->type) }}-600">
-                                    {{ __(config('system.tickets.relations.list.' . $relation->type)) }}
-                                </span>
-                                <a target="_blank" class="font-medium hover:underline"
-                                   href="{{ route('filament.resources.tickets.share', $relation->relation->code) }}">
-                                    {{ $relation->relation->code }}
-                                </a>
-                            </div>
-                        @endforeach
-                    </div>
+            <div class="w-full flex flex-col gap-1 pt-3">
+                <span class="text-gray-500 text-sm font-medium">
+                    {{ __('Reminder') }}
+                </span>
+                <div class="w-full text-gray-500">
+                    @if($record->reminder_at)
+                        {{ $record->reminder_at->format(__('Y-m-d g:i A')) }}
+                        <span class="text-xs text-gray-400">
+                            ({{ $record->reminder_at->diffForHumans() }})
+                        </span>
+                    @else
+                        <span class="text-gray-400">{{ __('No reminder set') }}</span>
+                    @endif
                 </div>
-            @endif
+            </div>
         </x-filament::card>
 
     </div>
@@ -232,16 +137,6 @@
                         class="md:text-xl text-sm p-3 border-b-2 border-transparent hover:border-primary-500
                         @if($tab === 'activities') border-primary-500 text-primary-500 @else text-gray-700 @endif">
                     {{ __('Activities') }}
-                </button>
-                <button wire:click="selectTab('time')"
-                        class="md:text-xl text-sm p-3 border-b-2 border-transparent hover:border-primary-500
-                        @if($tab === 'time') border-primary-500 text-primary-500 @else text-gray-700 @endif">
-                    {{ __('Time logged') }}
-                </button>
-                <button wire:click="selectTab('attachments')"
-                        class="md:text-xl text-sm p-3 border-b-2 border-transparent hover:border-primary-500
-                        @if($tab === 'attachments') border-primary-500 text-primary-500 @else text-gray-700 @endif">
-                    {{ __('Attachments') }}
                 </button>
             </div>
             @if($tab === 'comments')
@@ -321,12 +216,6 @@
                         </span>
                     @endif
                 </div>
-            @endif
-            @if($tab === 'time')
-                <livewire:timesheet.time-logged :ticket="$record" />
-            @endif
-            @if($tab === 'attachments')
-                <livewire:ticket.attachments :ticket="$record" />
             @endif
         </x-filament::card>
 

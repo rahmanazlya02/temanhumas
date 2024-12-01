@@ -25,26 +25,4 @@ class TicketTimeLogged extends BarChartWidget
     {
         return __('Time logged by tickets');
     }
-
-    protected function getData(): array
-    {
-        $query = Ticket::query();
-        $query->has('hours');
-        $query->limit(10);
-        return [
-            'datasets' => [
-                [
-                    'label' => __('Total time logged (hours)'),
-                    'data' => $query->get()->pluck('totalLoggedInHours')->toArray(),
-                    'backgroundColor' => [
-                        'rgba(54, 162, 235, .6)'
-                    ],
-                    'borderColor' => [
-                        'rgba(54, 162, 235, .8)'
-                    ],
-                ],
-            ],
-            'labels' => $query->get()->pluck('code')->toArray(),
-        ];
-    }
 }
