@@ -12,6 +12,6 @@ class CreateTicket extends CreateRecord
 
     protected function getTitle(): string
     {
-        return 'Create Task';
+        return 'Create New Task';
     }
 }

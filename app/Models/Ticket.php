@@ -22,7 +22,7 @@ class Ticket extends Model implements HasMedia
     protected $fillable = [
         'name', 'content', 'owner_id', 'responsible_id',
         'status_id', 'project_id', 'code', 'order', 'type_id',
-        'priority_id', 'estimation', 'epic_id', 'sprint_id'
+        'priority_id', 'estimation', 'deadline', 'epic_id', 'sprint_id'
     ];
 
     public static function boot()
@@ -103,6 +103,12 @@ class Ticket extends Model implements HasMedia
         return $this->belongsTo(TicketPriority::class, 'priority_id', 'id')->withTrashed();
     }
 
+    // Relasi epic - bisa jadi belongsTo atau hasOne
+    public function epic()
+    {
+        return $this->belongsTo(Epic::class, 'epic_id'); // Jika epic_id adalah foreign key
+    }
+
     public function activities(): HasMany
     {
         return $this->hasMany(TicketActivity::class, 'ticket_id', 'id');
@@ -113,34 +119,9 @@ class Ticket extends Model implements HasMedia
         return $this->hasMany(TicketComment::class, 'ticket_id', 'id');
     }
 
-    public function subscribers(): BelongsToMany
+    public function reminders(): HasMany
     {
-        return $this->belongsToMany(User::class, 'ticket_subscribers', 'ticket_id', 'user_id');
-    }
-
-    public function relations(): HasMany
-    {
-        return $this->hasMany(TicketRelation::class, 'ticket_id', 'id');
-    }
-
-    public function hours(): HasMany
-    {
-        return $this->hasMany(TicketHour::class, 'ticket_id', 'id');
-    }
-
-    public function epic(): BelongsTo
-    {
-        return $this->belongsTo(Epic::class, 'epic_id', 'id');
-    }
-
-    public function sprint(): BelongsTo
-    {
-        return $this->belongsTo(Sprint::class, 'sprint_id', 'id');
-    }
-
-    public function sprints(): BelongsTo
-    {
-        return $this->belongsTo(Sprint::class, 'sprint_id', 'id');
+    return $this->hasMany(Reminder::class, 'ticket_id', 'id');
     }
 
     public function watchers(): Attribute
@@ -163,15 +144,6 @@ class Ticket extends Model implements HasMedia
             get: function () {
                 $seconds = $this->hours->sum('value') * 3600;
                 return CarbonInterval::seconds($seconds)->cascade()->forHumans();
-            }
-        );
-    }
-
-    public function totalLoggedSeconds(): Attribute
-    {
-        return new Attribute(
-            get: function () {
-                return $this->hours->sum('value') * 3600;
             }
         );
     }

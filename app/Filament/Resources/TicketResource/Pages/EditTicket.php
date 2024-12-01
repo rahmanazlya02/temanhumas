@@ -10,6 +10,11 @@ class EditTicket extends EditRecord
 {
     protected static string $resource = TicketResource::class;
 
+    protected function getTitle(): string
+    {
+        return 'Edit Task';
+    }
+
     protected function getActions(): array
     {
         return [

@@ -8,6 +8,7 @@ use App\Models\Activity;
 use App\Models\TicketComment;
 use App\Models\TicketHour;
 use App\Models\TicketSubscriber;
+use App\Models\Reminder;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
@@ -21,12 +22,19 @@ use Filament\Pages\Actions;
 use Filament\Resources\Pages\ViewRecord;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Facades\Excel;
+use Filament\Forms\Components\DatePicker;
+use Illuminate\Support\Carbon;
 
 class ViewTicket extends ViewRecord implements HasForms
 {
     use InteractsWithForms;
 
     protected static string $resource = TicketResource::class;
+
+    protected function getTitle(): string
+    {
+        return 'View Task';
+    }
 
     protected static string $view = 'filament.resources.tickets.view';
 
@@ -45,31 +53,60 @@ class ViewTicket extends ViewRecord implements HasForms
     protected function getActions(): array
     {
         return [
-            Actions\Action::make('toggleSubscribe')
+            Actions\Action::make('setReminder')
                 ->label(__('Set Reminder'))
                 ->color('warning')
                 ->icon('heroicon-o-bell')
                 ->button()
-                ->action(function () {
-                    if (
-                        $sub = TicketSubscriber::where('user_id', auth()->user()->id)
-                            ->where('ticket_id', $this->record->id)
-                            ->first()
-                    ) {
-                        $sub->delete();
-                        $this->notify('success', __('You unsubscribed from the ticket'));
-                    } else {
-                        TicketSubscriber::create([
-                            'user_id' => auth()->user()->id,
-                            'ticket_id' => $this->record->id
-                        ]);
-                        $this->notify('success', __('You subscribed to the ticket'));
-                    }
-                    $this->record->refresh();
-                }),
+                ->form([
+                    DatePicker::make('reminderDate')
+                        ->label(__('Reminder Date'))
+                        ->minDate(now()->format('Y-m-d'))
+                        ->maxDate($this->record->deadline) // Asumsikan ada atribut `deadline` di tiket
+                        ->required(),
+                    TimePicker::make('reminderTime')
+                        ->label(__('Reminder Time'))
+                        ->required(),
+                ])
+                ->action('saveReminder'),
             Actions\EditAction::make(),
 
         ];
+    }
+
+    public function saveReminder(array $data): void
+    {
+        $reminderDateTime = Carbon::createFromFormat(
+            'Y-m-d H:i',
+            $data['reminderDate'] . ' ' . $data['reminderTime']
+        );
+
+        // Validasi agar tidak melebihi deadline
+        if ($reminderDateTime->greaterThan($this->record->deadline)) {
+            Notification::make()
+                ->title(__('Invalid Reminder'))
+                ->body(__('The reminder date and time cannot exceed the deadline.'))
+                ->warning()
+                ->send();
+
+            return;
+        }
+        // Simpan pengingat ke database (opsional)
+        Reminder::updateOrCreate(
+            [
+                'user_id' => auth()->user()->id,
+                'ticket_id' => $this->record->id,
+            ],
+            [
+                'reminder_at' => $reminderDateTime,
+            ]
+        );
+
+        Notification::make()
+            ->title(__('Reminder Set'))
+            ->body(__('You have successfully set a reminder.'))
+            ->success()
+            ->send();
     }
 
     public function selectTab(string $tab): void
