@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('tickets', function (Blueprint $table) {
-            $table->date('deadline')->nullable()->after('priority_id'); // Tambahkan kolom deadline setelah priority_id
+            $table->timestamp('deadline')->nullable()->after('priority_id'); // Tambahkan kolom deadline setelah priority_id
         });
     }
 

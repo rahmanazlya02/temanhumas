@@ -74,9 +74,9 @@
                     {{ __('Deadline') }}
                 </span>
                 <div class="w-full text-gray-500">
-                    {{ $record->deadline }}
+                    {{ \Carbon\Carbon::parse($record->deadline)->format(__('Y-m-d g:i A')) }}
                     <span class="text-xs text-gray-400">
-                        {{ $record->deadline }}
+                        {{ \Carbon\Carbon::parse($record->deadline)->diffForHumans() }}
                     </span>
                 </div>
             </div>
@@ -111,9 +111,9 @@
                 </span>
                 <div class="w-full text-gray-500">
                     @if($record->reminder_at)
-                        {{ $record->reminder_at->format(__('Y-m-d g:i A')) }}
+                        {{ \Carbon\Carbon::parse($record->reminder_at)->format(__('Y-m-d g:i A')) }}
                         <span class="text-xs text-gray-400">
-                            ({{ $record->reminder_at->diffForHumans() }})
+                            ({{ \Carbon\Carbon::parse($record->reminder_at)->diffForHumans() }})
                         </span>
                     @else
                         <span class="text-gray-400">{{ __('No reminder set') }}</span>

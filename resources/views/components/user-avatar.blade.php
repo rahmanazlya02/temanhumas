@@ -7,11 +7,6 @@
              data-popover-target="popover-user-{{ $user->id }}-{{ $uniqid }}"
              class="w-6 h-6 rounded-full bg-cover bg-center"/>
 
-        <!-- Nama Pemilik -->
-        <span class="text-sm font-small text-gray-800 dark:text-gray-200">
-            {{ explode(' ', $user->name)[0] }}
-        </span>
-
         <!-- Popover Detail -->
         <div data-popover id="popover-user-{{ $user->id }}-{{ $uniqid }}" role="tooltip"
              class="inline-block absolute invisible z-10 w-64 text-sm font-light text-gray-500

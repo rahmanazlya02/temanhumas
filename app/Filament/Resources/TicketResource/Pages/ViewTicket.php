@@ -76,10 +76,11 @@ class ViewTicket extends ViewRecord implements HasForms
 
     public function saveReminder(array $data): void
     {
+        // Gabungkan tanggal dan waktu menggunakan format yang benar
         $reminderDateTime = Carbon::createFromFormat(
             'Y-m-d H:i',
-            $data['reminderDate'] . ' ' . $data['reminderTime']
-        );
+        $data['reminderDate'] . ' ' . Carbon::parse($data['reminderTime'])->format('H:i')
+    );
 
         // Validasi agar tidak melebihi deadline
         if ($reminderDateTime->greaterThan($this->record->deadline)) {
