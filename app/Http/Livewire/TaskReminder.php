@@ -8,7 +8,7 @@ use Livewire\Component;
 class TaskReminder extends Component
 {
     public $record;
-    public $reminderTime;
+    public $reminderDateTime;
     public $reminderId;
 
     // Menyiapkan data saat komponen dimuat
@@ -21,10 +21,10 @@ class TaskReminder extends Component
 
         // Jika ada, set nilai reminder time dan ID
         if ($reminder) {
-            $this->reminderTime = $reminder->reminder_time;
+            $this->reminderDateTime = $reminder->reminder_at;
             $this->reminderId = $reminder->id;
         } else {
-            $this->reminderTime = '19:45'; // Default reminder time
+            $this->reminderDateTime = now()->format('Y-m-d g:i A'); // Default reminder time
         }
     }
 
@@ -35,13 +35,13 @@ class TaskReminder extends Component
         if ($this->reminderId) {
             $reminder = Reminder::find($this->reminderId);
             $reminder->update([
-                'reminder_time' => $this->reminderTime,
+                'reminder_at' => $this->reminderDateTime,
             ]);
         } else {
             // Membuat pengingat baru
             Reminder::create([
                 'ticket_id' => $this->record->id,
-                'reminder_time' => $this->reminderTime,
+                'reminder_at' => $this->reminderDateTime,
                 'status' => 'active', // Misalnya, status aktif
             ]);
         }

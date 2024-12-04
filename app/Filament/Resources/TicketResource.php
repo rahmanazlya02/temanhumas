@@ -165,11 +165,12 @@ class TicketResource extends Resource
                             ->columns(3)
                             ->columnSpan(2)
                             ->schema([
-                                Forms\Components\DatePicker::make('deadline')
-
+                                Forms\Components\DateTimePicker::make('deadline')
                                     ->label(__('Deadline'))
                                     ->required()
-                                    ->reactive(),
+                                    ->reactive()
+                                    ->minDate(now()->format('Y-m-d'))  // Today's date as the minimum date
+                                    ->default(now()->setTime(0,0))  
                             ]),
                     ]),
             ]);
@@ -193,13 +194,27 @@ class TicketResource extends Resource
             Tables\Columns\TextColumn::make('owner.name')
                 ->label(__('Owner'))
                 ->sortable()
-                ->formatStateUsing(fn($record) => view('components.user-avatar', ['user' => $record->owner]))
+                ->formatStateUsing(fn($record) => new HtmlString('
+                        <div class="flex items-center gap-2 mt-1">
+                            <span class="filament-tables-color-column relative flex h-6 w-6 rounded-full overflow-hidden">
+                                <img src="' . $record->owner->avatar_url . '" alt="' . $record->owner->name . '" class="object-cover h-full w-full">
+                            </span>
+                            <span>' . $record->owner->name . '</span>
+                        </div>
+                    '))
                 ->searchable(),
 
             Tables\Columns\TextColumn::make('responsible.name')
                 ->label(__('Responsible'))
                 ->sortable()
-                ->formatStateUsing(fn($record) => view('components.user-avatar', ['user' => $record->responsible]))
+                ->formatStateUsing(fn($record) => new HtmlString('
+                        <div class="flex items-center gap-2 mt-1">
+                            <span class="filament-tables-color-column relative flex h-6 w-6 rounded-full overflow-hidden">
+                                <img src="' . $record->responsible->avatar_url . '" alt="' . $record->responsible->name . '" class="object-cover h-full w-full">
+                            </span>
+                            <span>' . $record->responsible->name . '</span>
+                        </div>
+                    '))
                 ->searchable(),
 
             Tables\Columns\TextColumn::make('status.name')
@@ -236,7 +251,7 @@ class TicketResource extends Resource
 
             Tables\Columns\TextColumn::make('deadline')
                 ->label(__('Deadline'))
-                ->date() // Format sebagai tanggal
+                ->dateTime() // Format sebagai tanggal
                 ->sortable()
                 ->searchable(),
 
