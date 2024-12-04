@@ -9,12 +9,12 @@
 
 <x-filament-breezy::auth-card action="authenticate" class="bg-custom-blue">
 
-    <div class="w-full flex justify-center mb-0">
+    <div class="w-full flex justify-center mb-0 italic">
         <x-filament::brand />
     </div>
 
     <h2 class="mb-0">
-        <img src="{{ asset('img/temanhumas.png') }}" class="h-20 mx-auto mb-0">
+        <img src="{{ asset('img/temanhumas.png') }}" class="h-16 mx-auto mb-0">
     </h2>
 
     @if (config('system.login_form.is_enabled'))
