@@ -49,7 +49,7 @@ class LatestProjects extends BaseWidget
     {
         return [
             Tables\Columns\TextColumn::make('name')
-                ->label(__('Project ARI'))
+                ->label(__('Project'))
                 ->formatStateUsing(fn($record) => new HtmlString('
                             <div class="w-full flex items-center gap-2">
                                 <div style=\'background-image: url("' . $record->cover . '")\'
