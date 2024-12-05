@@ -9,21 +9,21 @@ class TicketTypeSeeder extends Seeder
 {
     private array $data = [
         [
-            'name' => 'Task',
+            'name' => 'Protocol',
             'icon' => 'heroicon-o-check-circle',
-            'color' => '#00FFFF',
+            'color' => '#058A91',
             'is_default' => true
         ],
         [
-            'name' => 'Evolution',
+            'name' => 'Content Creator',
             'icon' => 'heroicon-o-clipboard-list',
-            'color' => '#008000',
+            'color' => '#b6c909',
             'is_default' => false
         ],
         [
-            'name' => 'Bug',
+            'name' => 'Event Organizer',
             'icon' => 'heroicon-o-x',
-            'color' => '#ff0000',
+            'color' => '#DF4001',
             'is_default' => false
         ],
     ];

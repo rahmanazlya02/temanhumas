@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\ProjectStatus;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -18,6 +19,6 @@ class DatabaseSeeder extends Seeder
         $this->call(TicketTypeSeeder::class);
         $this->call(TicketPrioritySeeder::class);
         $this->call(TicketStatusSeeder::class);
-        $this->call(ActivitySeeder::class);
+        $this->call(ProjectStatusSeeder::class);
     }
 }

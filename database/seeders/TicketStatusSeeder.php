@@ -11,25 +11,25 @@ class TicketStatusSeeder extends Seeder
     private array $data = [
         [
             'name' => 'Todo',
-            'color' => '#cecece',
+            'color' => '#1bb4e7',
             'is_default' => true,
             'order' => 1
         ],
         [
-            'name' => 'In progress',
-            'color' => '#ff7f00',
+            'name' => 'On progress',
+            'color' => '#da7923',
             'is_default' => false,
             'order' => 2
         ],
         [
             'name' => 'Done',
-            'color' => '#008000',
+            'color' => '#00c100',
             'is_default' => false,
             'order' => 3
         ],
         [
-            'name' => 'Archived',
-            'color' => '#ff0000',
+            'name' => 'Approved',
+            'color' => '#058a91',
             'is_default' => false,
             'order' => 4
         ],
