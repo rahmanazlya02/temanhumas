@@ -48,13 +48,6 @@ class ManageGeneralSettings extends SettingsPage
                 ->schema([
                     Grid::make(3)
                         ->schema([
-                            FileUpload::make('site_logo')
-                                ->label(__('Site logo'))
-                                ->helperText(__('This is the platform logo (e.g. Used in site favicon)'))
-                                ->image()
-                                ->columnSpan(1)
-                                ->maxSize(config('system.max_file_size')),
-
                             Grid::make(1)
                                 ->columnSpan(2)
                                 ->schema([
@@ -76,10 +69,6 @@ class ManageGeneralSettings extends SettingsPage
                                         ->label(__('Enable form login?'))
                                         ->helperText(__('If enabled, a login form will be visible on the login page.')),
 
-                                    Toggle::make('enable_oidc_login')
-                                        ->label(__('Enable OIDC login?'))
-                                        ->helperText(__('If enabled, an OIDC Connect button will be visible on the login page.')),
-
                                     Select::make('site_language')
                                         ->label(__('Site language'))
                                         ->helperText(__('The language used by the platform.'))
@@ -88,7 +77,7 @@ class ManageGeneralSettings extends SettingsPage
 
                                     Select::make('default_role')
                                         ->label(__('Default role'))
-                                        ->helperText(__('The platform default role (used mainly in OIDC Connect).'))
+                                        ->helperText(__('The platform default role.'))
                                         ->searchable()
                                         ->options(Role::all()->pluck('name', 'id')->toArray()),
                                 ]),
