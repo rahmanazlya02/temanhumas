@@ -13,8 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('ticket_hours', function (Blueprint $table) {
-            $table->foreignId('activity_id')->nullable()->constrained('activities');
+        Schema::table('project_statuses', function (Blueprint $table) {
+            $table->integer('order')->after('is_default')->default(0);
         });
     }
 
@@ -25,9 +25,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('ticket_hours', function (Blueprint $table) {
-            $table->dropForeign(['activity_id']);
-            $table->dropColumn('activity_id');
+        Schema::table('project_statuses', function (Blueprint $table) {
+            $table->dropColumn('order');
         });
     }
 };
