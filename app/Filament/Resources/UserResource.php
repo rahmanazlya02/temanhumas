@@ -61,6 +61,19 @@ class UserResource extends Resource
                                     )
                                     ->maxLength(255),
 
+                                    Forms\Components\TextInput::make('whatsapp_number')
+                                    ->label(__('Whatsapp Number'))
+                                    ->required()
+                                    ->prefix('+62')
+                                    ->tel() //menggunakan format telepon
+                                    ->rule(
+                                        fn($record) => 'unique:users,whatsapp_number,numeric'
+                                            . ($record ? $record->id : 'NULL')
+                                            . ',id,deleted_at,NULL'
+                                    )
+                                    ->maxLength(12)
+                                    ->helperText(__('Only enter 8******* without 62 (max 12 characters without space; eg:81234567891).')),
+
                                 Forms\Components\CheckboxList::make('roles')
                                     ->label(__('Permission roles'))
                                     ->required()
@@ -82,6 +95,11 @@ class UserResource extends Resource
 
                 Tables\Columns\TextColumn::make('email')
                     ->label(__('Email address'))
+                    ->sortable()
+                    ->searchable(),
+                
+                Tables\Columns\TextColumn::make('whatsapp_number')
+                    ->label(__('Whatsapp Number'))
                     ->sortable()
                     ->searchable(),
 
