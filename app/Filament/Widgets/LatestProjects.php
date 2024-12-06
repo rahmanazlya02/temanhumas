@@ -19,7 +19,7 @@ class LatestProjects extends BaseWidget
 
     public function mount(): void
     {
-        self::$heading = __('Latest projects');
+        self::$heading = __('Latest project activities');
     }
 
     public static function canView(): bool
@@ -49,7 +49,7 @@ class LatestProjects extends BaseWidget
     {
         return [
             Tables\Columns\TextColumn::make('name')
-                ->label(__('Project'))
+                ->label(__('Project name'))
                 ->formatStateUsing(fn($record) => new HtmlString('
                             <div class="w-full flex items-center gap-2">
                                 <div style=\'background-image: url("' . $record->cover . '")\'

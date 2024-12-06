@@ -53,7 +53,7 @@ class LatestTickets extends BaseWidget
     {
         return [
             Tables\Columns\TextColumn::make('name')
-                ->label(__('Ticket'))
+                ->label(__('Task'))
                 ->formatStateUsing(fn($record) => new HtmlString('
                     <div class="flex flex-col gap-1">
                         <span class="text-gray-400 font-medium text-xs">

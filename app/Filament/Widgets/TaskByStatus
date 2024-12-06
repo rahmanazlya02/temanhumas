@@ -1,0 +1,35 @@
+<?php
+
+namespace App\Filament\Widgets;
+
+use Filament\Widgets\Widget;
+use App\Models\Ticket;
+
+class TaskByStatus extends Widget
+{
+    protected static string $view = 'filament.pages.task-by-status';
+
+    public static function canView(): bool
+    {
+        return auth()->user()->can('List tickets');
+    }
+
+    protected function getViewData(): array
+    {
+        // Fetch count of tickets by status
+        return [
+            'toDo' => Ticket::whereHas('status', function ($query) {
+                $query->where('name', 'Todo');  
+            })->count(),
+            'onProgress' => Ticket::whereHas('status', function ($query) {
+                $query->where('name', 'On progress');
+            })->count(),
+            'done' => Ticket::whereHas('status', function ($query) {
+                $query->where('name', 'Done');
+            })->count(),
+            'approved' => Ticket::whereHas('status', function ($query) {
+                $query->where('name', 'Approved');
+            })->count(),
+            ];
+    }
+}

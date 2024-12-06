@@ -16,6 +16,7 @@ use Illuminate\Support\Str;
 class LatestComments extends BaseWidget
 {
     protected static ?int $sort = 8;
+    protected static ?string $maxHeight = '300px';
     protected int|string|array $columnSpan = [
         'sm' => 1,
         'md' => 6,
@@ -24,7 +25,7 @@ class LatestComments extends BaseWidget
 
     public function mount(): void
     {
-        self::$heading = __('Latest tickets comments');
+        self::$heading = __('Latest task comments');
     }
 
     public static function canView(): bool
@@ -40,7 +41,6 @@ class LatestComments extends BaseWidget
     protected function getTableQuery(): Builder
     {
         return TicketComment::query()
-            ->limit(5)
             ->whereHas('ticket', function ($query) {
                 return $query->where('owner_id', auth()->user()->id)
                     ->orWhere('responsible_id', auth()->user()->id)
@@ -58,7 +58,7 @@ class LatestComments extends BaseWidget
     {
         return [
             Tables\Columns\TextColumn::make('ticket')
-                ->label(__('Ticket'))
+                ->label(__('Task'))
                 ->formatStateUsing(function ($state) {
                     return new HtmlString('
                     <div class="flex flex-col gap-1">
@@ -86,6 +86,21 @@ class LatestComments extends BaseWidget
                 ->dateTime()
         ];
     }
+
+    protected function renderTable(): string
+    {
+        return '
+            <div style="
+                overflow-y: auto;
+                max-height: ' . static::$maxHeight . ';
+                padding: 10px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+            ">
+                <table class="filament-tables-table">' . parent::renderTable() . '</table>
+            </div>
+        ';
+    }       
 
     protected function getTableActions(): array
     {
