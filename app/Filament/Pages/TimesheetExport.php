@@ -13,11 +13,14 @@ use Filament\Forms\Components\DatePicker;
 use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
+
 class TimesheetExport extends Page implements HasForms
 {
     use InteractsWithForms;
 
     protected static ?string $slug = 'timesheet-export';
+
+    protected static bool $shouldRegisterNavigation = true;
 
     protected static ?int $navigationSort = 2;
 
@@ -27,6 +30,7 @@ class TimesheetExport extends Page implements HasForms
     {
         return __('Timesheet');
     }
+
 
     public function mount(): void
     {

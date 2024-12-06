@@ -33,6 +33,10 @@ class PermissionsSeeder extends Seeder
 
     private string $defaultRole = 'Default role';
 
+    private string $koordinatorRole = 'Koordinator';
+    private string $anggotaRole = 'Anggota';
+
+
     /**
      * Run the database seeds.
      *
@@ -77,5 +81,23 @@ class PermissionsSeeder extends Seeder
         if ($user = User::first()) {
             $user->syncRoles([$this->defaultRole]);
         }
+
+
+        // Create default role
+        $koordinator = Role::firstOrCreate([
+            'name' => $this->koordinatorRole
+        ]);
+
+        // Create default role
+        $anggota = Role::firstOrCreate([
+            'name' => $this->anggotaRole
+        ]);
+
+        $anggota->syncPermissions([
+            Permission::findByName('List projects'),
+            Permission::findByName('View project'),
+            Permission::findByName('List tickets'),
+            Permission::findByName('View ticket')
+        ]);
     }
 }
