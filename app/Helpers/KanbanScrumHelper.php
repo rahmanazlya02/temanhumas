@@ -197,21 +197,24 @@ trait KanbanScrumHelper
     protected function kanbanHeading(): string|Htmlable
     {
         $heading = '<div class="w-full flex flex-col gap-1">';
+
+        // Tambahkan "Board - <Nama Proyek>" dengan nama proyek berwarna merah
+        if ($this->project) {
+            $heading .= '<span style="font-size: 24px; font-weight: bold; color: black;">'
+                . __('Board') . ' - <span style="color: red;">' . $this->project->name . '</span></span>';
+        } else {
+            $heading .= '<span style="font-size: 24px; font-weight: bold; color: black">'
+                . __('Board') . '</span>';
+        }
+
+        // Tambahkan tautan "Back to board" di bawahnya
         $heading .= '<a href="' . route('filament.pages.board') . '"
                             class="text-primary-500 text-xs font-medium hover:underline">';
         $heading .= __('Back to board');
         $heading .= '</a>';
-        $heading .= '<div class="flex flex-col gap-1">';
-        $heading .= '<span>' . __('Kanban');
-        if ($this->project) {
-            $heading .= ' - ' . $this->project->name . '</span>';
-        } else {
-            $heading .= '</span><span class="text-xs text-gray-400">'
-                . __('Only default statuses are listed when no projects selected')
-                . '</span>';
-        }
+
         $heading .= '</div>';
-        $heading .= '</div>';
+
         return new HtmlString($heading);
     }
 
