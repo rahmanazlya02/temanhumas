@@ -42,8 +42,10 @@ class AppServiceProvider extends ServiceProvider
         Filament::serving(function () {
             Filament::registerTheme(
                 app(Vite::class)('resources/css/filament.scss'),
-            );
+            ); 
         });
+
+        
 
         // Register tippy styles
         Filament::registerStyles([
