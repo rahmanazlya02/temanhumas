@@ -33,19 +33,17 @@ class AppServiceProvider extends ServiceProvider
     {
         // Configure application
         $this->configureApp();
-	
-	    if ($this->app->environment('production')) {
-        	\URL::forceRootUrl('http://ramba.emefer.site/project');
-    	}
+
+        if ($this->app->environment('production')) {
+            URL::forceRootUrl('http://ramba.emefer.site/project');
+        }
 
         // Register custom Filament theme
         Filament::serving(function () {
             Filament::registerTheme(
                 app(Vite::class)('resources/css/filament.scss'),
-            ); 
+            );
         });
-
-        
 
         // Register tippy styles
         Filament::registerStyles([

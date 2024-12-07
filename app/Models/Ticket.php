@@ -21,9 +21,21 @@ class Ticket extends Model implements HasMedia
     use HasFactory, SoftDeletes, InteractsWithMedia;
 
     protected $fillable = [
-        'name', 'content', 'owner_id', 'responsible_id',
-        'status_id', 'project_id', 'code', 'order', 'type_id',
-        'priority_id', 'estimation', 'deadline','reminder', 'epic_id', 'sprint_id'
+        'name',
+        'content',
+        'owner_id',
+        'responsible_id',
+        'status_id',
+        'project_id',
+        'code',
+        'order',
+        'type_id',
+        'priority_id',
+        'estimation',
+        'deadline',
+        'reminder',
+        'epic_id',
+        'sprint_id'
     ];
 
     public static function boot()
