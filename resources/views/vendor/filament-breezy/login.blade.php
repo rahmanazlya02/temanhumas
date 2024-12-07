@@ -6,10 +6,9 @@
         }
     </style>
 @endsection
+<x-filament-breezy::auth-card action="authenticate" class="bg-blue" style="background-color: #1E40AF">
 
-<x-filament-breezy::auth-card action="authenticate" class="bg-custom-blue">
-
-    <div class="w-full flex justify-center mb-0 italic">
+    <div class="w-full flex justify-center mb-0 italic text-white">
         <x-filament::brand />
     </div>
 
@@ -20,7 +19,7 @@
     @if (config('system.login_form.is_enabled'))
         {{ $this->form }}
 
-        <x-filament::button type="submit" class="w-full bg-blue-500">
+        <x-filament::button type="submit" class="w-full bg-blue-500 text-white ">
             {{ __('filament::login.buttons.submit.label') }}
         </x-filament::button>
 
