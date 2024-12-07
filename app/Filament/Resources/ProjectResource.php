@@ -43,6 +43,8 @@ class ProjectResource extends Resource
         return __('Management');
     }
 
+    
+
     public static function form(Form $form): Form
     {
         return $form
@@ -84,8 +86,22 @@ class ProjectResource extends Resource
 
                                 Forms\Components\RichEditor::make('description')
                                     ->label(__('Project description'))
+                                    ->required()
                                     ->columnSpan(3),
+
+                                Forms\Components\Grid::make()
+                                ->columns(3)
+                                ->columnSpan(2)
+                                ->schema([
+                                    Forms\Components\DateTimePicker::make('deadline')
+                                        ->label(__('Deadline'))
+                                        ->required()
+                                        ->reactive()
+                                        ->minDate(now()->format('Y-m-d'))  // Today's date as the minimum date
+                                        ->default(now()->setTime(0,0))  
+                                ]),    
                             ]),
+                            
                     ]),
             ]);
     }
@@ -117,8 +133,14 @@ class ProjectResource extends Resource
                     ->searchable(),
 
                 Tables\Columns\TagsColumn::make('users.name')
-                    ->label(__('Affected users'))
+                    ->label(__('Users'))
                     ->limit(2),
+                
+                Tables\Columns\TextColumn::make('deadline')
+                    ->label(__('Deadline'))
+                    ->dateTime() // Format sebagai tanggal
+                    ->sortable()
+                    ->searchable(),
 
                 Tables\Columns\TextColumn::make('created_at')
                     ->label(__('Created at'))
@@ -136,6 +158,11 @@ class ProjectResource extends Resource
                     ->label(__('Status'))
                     ->multiple()
                     ->options(fn() => ProjectStatus::all()->pluck('name', 'id')->toArray()),
+
+                Tables\Filters\SelectFilter::make('deadline')
+                    ->label('Deadline')
+                    ->multiple()
+                    ->options(fn() => Ticket::all()->pluck('deadline')->toArray()),
             ])
             ->actions([
 
@@ -181,16 +208,74 @@ class ProjectResource extends Resource
             RelationManagers\SprintsRelationManager::class,
             RelationManagers\UsersRelationManager::class,
             RelationManagers\StatusesRelationManager::class,
+            RelationManagers\TicketsRelationManager::class,
         ];
     }
 
-    public static function getPages(): array
-    {
-        return [
-            'index' => Pages\ListProjects::route('/'),
-            'create' => Pages\CreateProject::route('/create'),
-            'view' => Pages\ViewProject::route('/{record}'),
-            'edit' => Pages\EditProject::route('/{record}/edit'),
-        ];
-    }
+public static function getPages(): array
+{
+    return [
+        'index' => Pages\ListProjects::route('/'),
+        'create' => Pages\CreateProject::route('/create'),
+        'view' => Pages\ViewProject::route('/{record}', function ($record) {
+            return [
+                'components' => [
+                    // Informasi Project
+                    Forms\Components\Card::make()
+                        ->schema([
+                            Forms\Components\TextInput::make('name')
+                                ->label(__('Project\'s Name'))
+                                ->default($record->name)
+                                ->disabled(),
+
+                            Forms\Components\TextInput::make('owner.name')
+                                ->label(__('Project\'s Owner'))
+                                ->default($record->owner->name)
+                                ->disabled(),
+
+                            Forms\Components\TextInput::make('status.name')
+                                ->label(__('Project\'s Status'))
+                                ->default($record->status->name)
+                                ->disabled(),
+
+                            Forms\Components\RichEditor::make('description')
+                                ->label(__('Project\'s Description'))
+                                ->default($record->description)
+                                ->disabled(),
+                        ])
+                        ->columns(2), // Tampilkan dalam dua kolom untuk tata letak yang lebih baik
+
+                    // Task List (Tickets Relation)
+                    Forms\Components\Card::make()
+                        ->schema([
+                            Tables\Table::make()
+                                ->columns(TicketsRelationManager::table(new Table)->getColumns()) // Ambil kolom dari TicketsRelationManager
+                        ])
+                        ->label(__('Task List')),
+
+                    // Users List
+                    Forms\Components\Card::make()
+                        ->schema([
+                            Tables\Table::make()
+                                ->columns([
+                                    Tables\Columns\TextColumn::make('name')
+                                        ->label(__('User Full Name'))
+                                        ->sortable()
+                                        ->searchable(),
+                                    Tables\Columns\TextColumn::make('role')
+                                        ->label(__('User Role'))
+                                        ->sortable()
+                                        ->searchable(),
+                                ])
+                                ->rows(fn() => $record->users), // Ambil data pengguna terkait dari relasi
+                        ])
+                        ->label(__('Users')),
+                ],
+            ];
+        }),
+        'edit' => Pages\EditProject::route('/{record}/edit'),
+    ];
+}
+
+
 }

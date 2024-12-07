@@ -25,7 +25,7 @@ class Board extends Page implements HasForms
 
     protected function getSubheading(): string|Htmlable|null
     {
-        return __("Pilih project yang ingin ditampilkan pada kanban board");
+        return __("Pilih proyek yang akan ditampilkan pada board");
     }
 
     public function mount(): void
@@ -52,12 +52,12 @@ class Board extends Page implements HasForms
                         ->columns(1)
                         ->schema([
                             Select::make('project')
-                                ->label(__('Proyek'))
+                                ->label(__('Project'))
                                 ->required()
                                 ->searchable()
                                 ->reactive()
                                 ->afterStateUpdated(fn () => $this->search())
-                                ->helperText(__("Choose a project to show it's board"))
+                                ->helperText(__("Pilih proyek yang akan ditampilkan"))
                                 ->options(fn() => Project::where('owner_id', auth()->user()->id)
                                     ->orWhereHas('users', function ($query) {
                                         return $query->where('users.id', auth()->user()->id);

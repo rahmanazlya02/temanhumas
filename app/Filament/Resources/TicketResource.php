@@ -101,6 +101,7 @@ class TicketResource extends Resource
                                 Forms\Components\Select::make('responsible_id')
                                     ->label(__('Task responsible'))
                                     ->searchable()
+                                    ->required()
                                     ->options(fn() => User::all()->pluck('name', 'id')->toArray()),
 
                                 Forms\Components\Grid::make()
@@ -170,7 +171,13 @@ class TicketResource extends Resource
                                     ->required()
                                     ->reactive()
                                     ->minDate(now()->format('Y-m-d'))  // Today's date as the minimum date
-                                    ->default(now()->setTime(0,0))  
+                                    ->maxDate(function ($get) {
+                                        // Mengambil proyek terkait
+                                        $project = Project::where('id', $get('project_id'))->first();
+                                        // Mengambil tanggal deadline proyek, jika ada
+                                        return $project ? $project->deadline : now()->format('Y-m-d');
+                                    })
+                                // ->default(now()->setTime(0, 0))
                             ]),
                     ]),
             ]);
@@ -251,6 +258,12 @@ class TicketResource extends Resource
 
             Tables\Columns\TextColumn::make('deadline')
                 ->label(__('Deadline'))
+                ->dateTime() // Format sebagai tanggal
+                ->sortable()
+                ->searchable(),
+
+            Tables\Columns\TextColumn::make('reminder')
+                ->label(__('Reminder'))
                 ->dateTime() // Format sebagai tanggal
                 ->sortable()
                 ->searchable(),
