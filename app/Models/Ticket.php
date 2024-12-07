@@ -14,15 +14,28 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Illuminate\Support\Carbon;
 
 class Ticket extends Model implements HasMedia
 {
     use HasFactory, SoftDeletes, InteractsWithMedia;
 
     protected $fillable = [
-        'name', 'content', 'owner_id', 'responsible_id',
-        'status_id', 'project_id', 'code', 'order', 'type_id',
-        'priority_id', 'estimation', 'deadline','reminder', 'epic_id', 'sprint_id'
+        'name',
+        'content',
+        'owner_id',
+        'responsible_id',
+        'status_id',
+        'project_id',
+        'code',
+        'order',
+        'type_id',
+        'priority_id',
+        'estimation',
+        'deadline',
+        'reminder',
+        'epic_id',
+        'sprint_id'
     ];
 
     public static function boot()
@@ -35,6 +48,9 @@ class Ticket extends Model implements HasMedia
             $order = $project->tickets?->last()?->order ?? -1;
             $item->code = $project->ticket_prefix . '-' . ($count + 1);
             $item->order = $order + 1;
+            if (empty($item->reminder) && !empty($item->deadline)) {
+                $item->reminder = Carbon::parse($item->deadline)->subHours(12);
+            };
         });
 
         static::created(function (Ticket $item) {
@@ -121,7 +137,7 @@ class Ticket extends Model implements HasMedia
 
     public function reminders(): HasMany
     {
-    return $this->hasMany(Reminder::class, 'ticket_id', 'id');
+        return $this->hasMany(Reminder::class, 'ticket_id', 'id');
     }
 
     public function watchers(): Attribute
