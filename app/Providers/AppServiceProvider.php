@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\HtmlString;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Carbon;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -32,19 +33,17 @@ class AppServiceProvider extends ServiceProvider
     {
         // Configure application
         $this->configureApp();
-	
-	    if ($this->app->environment('production')) {
-        	\URL::forceRootUrl('http://ramba.emefer.site/project');
-    	}
+
+        if ($this->app->environment('production')) {
+            URL::forceRootUrl('http://ramba.emefer.site/project');
+        }
 
         // Register custom Filament theme
         Filament::serving(function () {
             Filament::registerTheme(
                 app(Vite::class)('resources/css/filament.scss'),
-            ); 
+            );
         });
-
-        
 
         // Register tippy styles
         Filament::registerStyles([
@@ -85,6 +84,8 @@ class AppServiceProvider extends ServiceProvider
     {
         try {
             $settings = app(GeneralSettings::class);
+            config(['app.locale' => 'id']);
+            Carbon::setLocale('id');
             Config::set('app.locale', $settings->site_language ?? config('app.fallback_locale'));
             Config::set('app.name', $settings->site_name ?? env('APP_NAME'));
             Config::set('filament.brand', $settings->site_name ?? env('APP_NAME'));
