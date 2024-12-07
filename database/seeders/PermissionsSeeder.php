@@ -35,6 +35,10 @@ class PermissionsSeeder extends Seeder
     private string $koorTim = 'Koordinator Tim';
     private string $anggotaTim = 'Anggota Tim';
 
+    private string $koordinatorRole = 'Koordinator';
+    private string $anggotaRole = 'Anggota';
+
+
     /**
      * Run the database seeds.
      *
@@ -80,38 +84,21 @@ class PermissionsSeeder extends Seeder
             $user->syncRoles([$this->defaultRole]);
         }
 
-        # Make Koordinator Tim role
-        $koorTim = Role::create(['name' => $this->koorTim]);
-
-        $koorTim->givePermissionTo([]);
-
-        # Make Anggota Tim Role
-        $anggotaTim = Role::create(['name' => $this->anggotaTim]);
-
-        $koorTim->givePermissionTo([
-            // 'List permission',
-            'View permission',
-            'View project',
-            // 'List project',
-            'View project status',
-            // 'List project status',
-            'View role',
-            // 'List role',
-            'View ticket',
-            'View ticket priority',
-            'View ticket status',
-            'View ticket type',
-            'View user',
-            'View activity',
-            'View sprint'
+        // Create default role
+        $koordinator = Role::firstOrCreate([
+            'name' => $this->koordinatorRole
         ]);
 
-        # Assign koor tim role
-        $userUpin = User::find(2);
-        $userUpin->assignRole($this->koorTim);
+        // Create default role
+        $anggota = Role::firstOrCreate([
+            'name' => $this->anggotaRole
+        ]);
 
-        # Assign anggota tim role
-        $userIpin = User::find(3);
-        $userIpin->assignRole($this->anggotaTim);
+        $anggota->syncPermissions([
+            Permission::findByName('List projects'),
+            Permission::findByName('View project'),
+            Permission::findByName('List tickets'),
+            Permission::findByName('View ticket')
+        ]);
     }
 }

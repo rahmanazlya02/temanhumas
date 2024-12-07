@@ -6,6 +6,7 @@ use App\Exports\TicketHoursExport;
 use App\Filament\Resources\TicketResource;
 use App\Models\Activity;
 use App\Models\TicketComment;
+use App\Models\Ticket;
 use App\Models\TicketHour;
 use App\Models\TicketSubscriber;
 use App\Models\Reminder;
@@ -93,13 +94,12 @@ class ViewTicket extends ViewRecord implements HasForms
             return;
         }
         // Simpan pengingat ke database (opsional)
-        Reminder::updateOrCreate(
+        Ticket::updateOrCreate(
             [
-                'user_id' => auth()->user()->id,
-                'ticket_id' => $this->record->id,
+                'id' => $this->record->id,
             ],
             [
-                'reminder_at' => $reminderDateTime,
+                'reminder' => $reminderDateTime,
             ]
         );
 

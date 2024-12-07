@@ -26,6 +26,7 @@ class SocialRegistration
     {
         $user = $event->socialiteUser->user;
         $user->email_verified_at = now();
+        $user->assignRole('Anggota');
         $user->save();
     }
 }
