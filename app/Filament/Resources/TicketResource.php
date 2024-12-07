@@ -101,6 +101,7 @@ class TicketResource extends Resource
                                 Forms\Components\Select::make('responsible_id')
                                     ->label(__('Task responsible'))
                                     ->searchable()
+                                    ->required()
                                     ->options(fn() => User::all()->pluck('name', 'id')->toArray()),
 
                                 Forms\Components\Grid::make()
