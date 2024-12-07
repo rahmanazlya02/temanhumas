@@ -13,7 +13,7 @@ class ListProjectStatuses extends ListRecords
     protected function getActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            Actions\CreateAction::make()->label('New Project Status'),
         ];
     }
 }
