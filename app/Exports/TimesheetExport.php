@@ -3,7 +3,6 @@
 namespace App\Exports;
 
 use App\Models\Ticket;
-use App\Models\TicketHour;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
@@ -23,11 +22,10 @@ class TimesheetExport implements FromCollection, WithHeadings
             'Project',
             'Task',
             'Details',
-            'User',
-            'Time',
-            'Hours',
-            'Activity',
-            'Date',
+            'Owner',
+            'Responsible',
+            'Type',
+            'Status'
         ];
     }
 
@@ -38,21 +36,21 @@ class TimesheetExport implements FromCollection, WithHeadings
     {
         $collection = collect();
 
-        $hours = TicketHour::where('user_id', auth()->user()->id)
+        // Mengambil data Ticket dengan eager loading untuk mengoptimalkan query
+        $tickets = Ticket::with(['type', 'status', 'owner', 'responsible', 'project'])
+            ->where('owner_id', auth()->user()->id) // Menggunakan owner_id
             ->whereBetween('created_at', [$this->params['start_date'], $this->params['end_date']])
             ->get();
 
-        foreach ($hours as $item) {
+        foreach ($tickets as $ticket) {
             $collection->push([
-                '#' => $item->ticket->code,
-                'project' => $item->ticket->project->name,
-                'ticket' => $item->ticket->name,
-                'details' => $item->comment,
-                'user' => $item->user->name,
-                'time' => $item->forHumans,
-                'hours' => number_format($item->value, 2, ',', ' '),
-                'activity' => $item->activity ? $item->activity->name : '-',
-                'date' => $item->created_at->format(__('Y-m-d g:i A')),
+                'project' => $ticket->project?->name ?? '-', // Nama proyek
+                'task' => $ticket->name, // Nama tiket diubah menjadi Task
+                'details' => strip_tags($ticket->content), // Detil tiket
+                'owner' => $ticket->owner?->name ?? '-', // Nama owner
+                'responsible' => $ticket->responsible?->name ?? '-', // Nama responsible
+                'type' => $ticket->type?->name ?? '-', // Nama tipe tiket
+                'status' => $ticket->status?->name ?? '-', // Nama status tiket
             ]);
         }
     
