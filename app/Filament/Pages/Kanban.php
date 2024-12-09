@@ -52,7 +52,7 @@ class Kanban extends Page implements HasForms
                 ->color('secondary')
                 ->action(function () {
                     $this->getRecords();
-                    Filament::notify('success', __('board updated'));
+                    Filament::notify('success', __('Kanban board updated'));
                 })
         ];
     }
