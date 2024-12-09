@@ -3,9 +3,7 @@
 namespace App\Exports;
 
 use App\Models\Ticket;
-use App\Models\User;
-use App\Models\TicketType;
-use App\Models\TicketStatus;
+use App\Models\TicketHour;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
@@ -25,10 +23,11 @@ class TimesheetExport implements FromCollection, WithHeadings
             'Project',
             'Task',
             'Details',
-            'Owner',
-            'Responsible',
-            'Type',
-            'Status',
+            'User',
+            'Time',
+            'Hours',
+            'Activity',
+            'Date',
         ];
     }
 
@@ -38,21 +37,22 @@ class TimesheetExport implements FromCollection, WithHeadings
     public function collection(): Collection
     {
         $collection = collect();
-    
-        $tickets = Ticket::with(['type', 'status', 'owner', 'responsible', 'project'])
-            ->where('owner_id', auth()->user()->id)
+
+        $hours = TicketHour::where('user_id', auth()->user()->id)
             ->whereBetween('created_at', [$this->params['start_date'], $this->params['end_date']])
             ->get();
-    
-        foreach ($tickets as $ticket) {
+
+        foreach ($hours as $item) {
             $collection->push([
-                'project' => $ticket->project?->name ?? '-', // Nama proyek
-                'task' => $ticket->name, // Nama tiket diubah menjadi Task
-                'details' => strip_tags($ticket->content), // Menghapus tag HTML dari content
-                'owner' => $ticket->owner?->name ?? '-', // Nama owner
-                'responsible' => $ticket->responsible?->name ?? '-', // Nama responsible
-                'type' => $ticket->type?->name ?? '-', // Nama tipe tiket
-                'status' => $ticket->status?->name ?? '-', // Nama status tiket
+                '#' => $item->ticket->code,
+                'project' => $item->ticket->project->name,
+                'ticket' => $item->ticket->name,
+                'details' => $item->comment,
+                'user' => $item->user->name,
+                'time' => $item->forHumans,
+                'hours' => number_format($item->value, 2, ',', ' '),
+                'activity' => $item->activity ? $item->activity->name : '-',
+                'date' => $item->created_at->format(__('Y-m-d g:i A')),
             ]);
         }
     
