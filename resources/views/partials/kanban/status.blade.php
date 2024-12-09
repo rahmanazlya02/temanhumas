@@ -18,9 +18,8 @@
 
         @if($status['add_ticket'])
             <a class="create-record hover:cursor-pointer"
-               wire:click="createTicket"
-               target="_blank">
-                <x-heroicon-o-plus class="w-4 h-4" /> {{ __('Create ticket') }}
+            href="{{ route('filament.resources.tickets.create', ['project' => request()->get('project')]) }}">
+                <x-heroicon-o-plus class="w-4 h-4" /> {{ __('Create Ticket') }}
             </a>
 
             @if($ticket)
@@ -37,5 +36,7 @@
                 </div>
             @endif
         @endif
+
+
     </div>
 </div>
