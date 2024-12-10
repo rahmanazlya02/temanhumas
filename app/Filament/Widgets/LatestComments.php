@@ -24,7 +24,7 @@ class LatestComments extends BaseWidget
 
     public function mount(): void
     {
-        self::$heading = __('Latest tickets comments');
+        self::$heading = __('Latest task comments');
     }
 
     public static function canView(): bool
@@ -58,7 +58,7 @@ class LatestComments extends BaseWidget
     {
         return [
             Tables\Columns\TextColumn::make('ticket')
-                ->label(__('Ticket'))
+                ->label(__('Task'))
                 ->formatStateUsing(function ($state) {
                     return new HtmlString('
                     <div class="flex flex-col gap-1">
