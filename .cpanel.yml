@@ -1,0 +1,5 @@
+---
+deployment:
+tasks:
+- export DEPLOYPATH=/home/222212787nazlyarahmasusanto.site/public_html/temanhumas
+- /bin/cp -r * $DEPLOYPATH
