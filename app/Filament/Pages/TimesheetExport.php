@@ -47,7 +47,7 @@ class TimesheetExport extends Page implements HasForms
                         DatePicker::make('start_date')
                             ->required()
                             ->reactive()
-                            ->label('Star date'),
+                            ->label('Start date'),
                         DatePicker::make('end_date')
                             ->required()
                             ->reactive()
