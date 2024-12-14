@@ -6,7 +6,6 @@
     ];
 @endphp
 
-<h1> </h1>
 <div class="grid grid-cols-{{ $columnSpan['sm'] }} sm:grid-cols-{{ $columnSpan['sm'] }} md:grid-cols-{{ $columnSpan['md'] }} lg:grid-cols-{{ $columnSpan['lg'] }} gap-4">
     <div class="col-span-full flex gap-4 justify-around">
         @foreach ($statuses as $status)
