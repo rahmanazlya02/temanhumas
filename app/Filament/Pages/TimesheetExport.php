@@ -58,14 +58,14 @@ class TimesheetExport extends Page implements HasForms
     }
 
     public function create(): BinaryFileResponse
-    {
-        $data = $this->form->getState();
+{
+    $data = $this->form->getState();
 
-        return Excel::download(
-            new \App\Exports\TimesheetExport($data),
-            'time_' . time() . '.csv',
-            \Maatwebsite\Excel\Excel::CSV,
-            ['Content-Type' => 'text/csv']
-        );
-    }
+    return Excel::download(
+        new \App\Exports\TimesheetExport($data),
+        'time_' . time() . '.xlsx', // Ganti ekstensi menjadi .xlsx
+        \Maatwebsite\Excel\Excel::XLSX, // Ganti format ke XLSX
+        ['Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'] // Content-Type untuk file Excel
+    );
+}
 }
