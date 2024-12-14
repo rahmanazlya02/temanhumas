@@ -17,12 +17,13 @@
         @endforeach
 
         @if($status['add_ticket'])
-            <a class="create-record hover:cursor-pointer"
-            href="{{ route('filament.resources.tickets.create', ['project' => request()->get('project')]) }}">
-                <x-heroicon-o-plus class="w-4 h-4" /> {{ __('Create Ticket') }}
+            <a 
+                class="create-record hover:cursor-pointer text-black font-bold hover:underline"
+                href="{{ route('filament.resources.tickets.create', ['project' => request()->get('project')]) }}">
+                <x-heroicon-o-plus class="w-4 h-4 md:w-6 md:h-6" />
+                <span class="text-[16px] md:text-[18px]">{{ __('Create Task') }}</span>
             </a>
         @endif
-
 
     </div>
 </div>

@@ -11,7 +11,7 @@ class TicketPriority extends Component
 
     /**
      * Create a new component instance.
-     *
+     * test
      * @return void
      */
     public function __construct(Model $priority)
