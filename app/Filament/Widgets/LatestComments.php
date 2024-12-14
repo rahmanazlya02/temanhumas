@@ -66,10 +66,6 @@ class LatestComments extends BaseWidget
                             ' . $state->project->name . '
                         </span>
                         <span>
-                            <a href="' . route('filament.resources.tickets.share', $state->code)
-                        . '" target="_blank" class="text-primary-500 text-sm hover:underline">'
-                        . $state->code
-                        . '</a>
                             <span class="text-sm text-gray-400">|</span> '
                         . $state->name . '
                         </span>
