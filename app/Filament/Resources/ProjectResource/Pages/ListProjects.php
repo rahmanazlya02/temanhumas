@@ -20,12 +20,14 @@ class ListProjects extends ListRecords
 
     protected function getTableQuery(): Builder
     {
+        $user = auth()->user();
+
         return parent::getTableQuery()
-            ->where(function ($query) {
-                return $query->where('owner_id', auth()->user()->id)
-                    ->orWhereHas('users', function ($query) {
-                        return $query->where('users.id', auth()->user()->id);
-                    });
+            ->where(function ($query) use ($user) {
+                $query->where('owner_id', $user->id) // Proyek milik pengguna
+                      ->orWhereHas('users', function ($query) use ($user) { // Proyek yang melibatkan pengguna
+                          $query->where('users.id', $user->id);
+                      });
             });
     }
 }
