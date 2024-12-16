@@ -36,9 +36,15 @@ class TimesheetExport implements FromCollection, WithHeadings
     {
         $collection = collect();
 
-        // Mengambil data Ticket dengan eager loading untuk mengoptimalkan query
+        /// Mengambil data Ticket dengan eager loading untuk mengoptimalkan query
         $tickets = Ticket::with(['type', 'status', 'owner', 'responsible', 'project'])
-            ->where('owner_id', auth()->user()->id) // Menggunakan owner_id
+            ->where(function ($query) {
+                $query->where('owner_id', auth()->user()->id) // Mengambil tiket yang dimiliki oleh pengguna
+                    ->orWhere('responsible_id', auth()->user()->id) // Mengambil tiket yang ditugaskan ke pengguna
+                    ->orWhereHas('project.users', function ($query) { // Mengambil tiket yang terkait dengan proyek di mana pengguna adalah anggota
+                        $query->where('users.id', auth()->user()->id);
+                    });
+            })
             ->whereBetween('created_at', [$this->params['start_date'], $this->params['end_date']])
             ->get();
 
