@@ -23,7 +23,7 @@ class TicketsByType extends DoughnutChartWidget
 
     protected function getHeading(): string
     {
-        return __('Task by types');
+        return __('Tasks by Types');
     }
 
     protected function getData(): array
