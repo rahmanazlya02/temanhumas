@@ -71,6 +71,6 @@ class TicketStatus extends Model
      */
     public function getTicketCountAttribute(): int
     {
-        return $this->tickets()->count();
+         return $this->tickets()->whereNull('deleted_at')->count();
     }
 }

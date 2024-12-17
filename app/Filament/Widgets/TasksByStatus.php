@@ -9,12 +9,12 @@ class TasksByStatus extends Widget
 {
     protected static string $view = 'filament.pages.tasks-by-status';
 
-    // Mengambil data status dan jumlah tiket
     protected function getViewData(): array
     {
         $statuses = TicketStatus::all();
 
         return [
+            'heading' => __('Tasks by Status'),
             'statuses' => $statuses->map(function ($status) {
                 return [
                     'name' => $status->name,

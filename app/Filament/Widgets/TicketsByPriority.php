@@ -23,7 +23,7 @@ class TicketsByPriority extends DoughnutChartWidget
 
     protected function getHeading(): string
     {
-        return __('Tickets by priorities');
+        return __('Tasks by Priority');
     }
 
     protected function getData(): array

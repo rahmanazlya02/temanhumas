@@ -17,6 +17,7 @@ class TicketPriority extends Model
 
     public function tickets(): HasMany
     {
-        return $this->hasMany(Ticket::class, 'priority_id', 'id')->withTrashed();
+        return $this->hasMany(Ticket::class, 'priority_id', 'id')
+        ->whereNull('deleted_at'); 
     }
 }
