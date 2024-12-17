@@ -91,6 +91,7 @@ class PermissionsSeeder extends Seeder
         $koordinator->syncPermissions([
             Permission::findByName('List projects'),
             Permission::findByName('View project'),
+            Permission::findByName('Edit project'),
             Permission::findByName('List tickets'),
             Permission::findByName('View ticket'),
             Permission::findByName('Create ticket'),
