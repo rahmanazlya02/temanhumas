@@ -31,10 +31,7 @@ class PermissionsSeeder extends Seeder
     ];
 
     private array $singularActions = [
-        'View',
-        'Create',
-        'Update',
-        'Delete'
+        'View', 'Create', 'Update', 'Delete', 'Mark as completed'
     ];
 
     private array $extraPermissions = [
@@ -103,6 +100,7 @@ class PermissionsSeeder extends Seeder
 
         $koordinator->syncPermissions([
             Permission::findByName('List projects'),
+            Permission::findByName('Mark as completed'), 
             Permission::findByName('View project'),
             Permission::findByName('Update project'),
             Permission::findByName('List tickets'),
