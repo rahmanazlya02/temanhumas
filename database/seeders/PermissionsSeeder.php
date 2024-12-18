@@ -31,9 +31,9 @@ class PermissionsSeeder extends Seeder
         'List timesheet data', 'View timesheet dashboard'
     ];
 
-    private string $defaultRole = 'Default role';
+    private string $defaultRole = 'Ketua Tim Humas';
 
-    private string $koordinatorRole = 'Koordinator';
+    private string $koordinatorRole = 'Koordinator Subtim';
     private string $anggotaRole = 'Anggota';
 
 
@@ -88,6 +88,19 @@ class PermissionsSeeder extends Seeder
             'name' => $this->koordinatorRole
         ]);
 
+        $koordinator->syncPermissions([
+            Permission::findByName('List projects'),
+            Permission::findByName('View project'),
+            Permission::findByName('Update project'),
+            Permission::findByName('List tickets'),
+            Permission::findByName('View ticket'),
+            Permission::findByName('Create ticket'),
+            Permission::findByName('Update ticket'),
+            Permission::findByName('Delete ticket'),
+            Permission::findByName('List timesheet data'),
+            Permission::findByName('View timesheet dashboard')
+        ]);
+
         // Create default role
         $anggota = Role::firstOrCreate([
             'name' => $this->anggotaRole
@@ -97,7 +110,9 @@ class PermissionsSeeder extends Seeder
             Permission::findByName('List projects'),
             Permission::findByName('View project'),
             Permission::findByName('List tickets'),
-            Permission::findByName('View ticket')
+            Permission::findByName('View ticket'),
+            Permission::findByName('List timesheet data'),
+            Permission::findByName('View timesheet dashboard')
         ]);
     }
 }

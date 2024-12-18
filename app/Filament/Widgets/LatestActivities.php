@@ -25,7 +25,7 @@ class LatestActivities extends BaseWidget
 
     public function mount(): void
     {
-        self::$heading = __('Latest task activities'); 
+        self::$heading = __('Latest Task Activities'); 
     }
 
     public static function canView(): bool
@@ -41,19 +41,23 @@ class LatestActivities extends BaseWidget
     protected function getTableQuery(): Builder
     {
         return TicketActivity::query()
-            ->limit(5)
             ->whereHas('ticket', function ($query) {
-                return $query->where('owner_id', auth()->user()->id)
-                    ->orWhere('responsible_id', auth()->user()->id)
-                    ->orWhereHas('project', function ($query) {
-                        return $query->where('owner_id', auth()->user()->id)
-                            ->orWhereHas('users', function ($query) {
-                                return $query->where('users.id', auth()->user()->id);
+                return $query->whereNull('deleted_at') 
+                    ->where(function ($query) {
+                        $query->where('owner_id', auth()->user()->id)
+                            ->orWhere('responsible_id', auth()->user()->id)
+                            ->orWhereHas('project', function ($query) {
+                                return $query->where('owner_id', auth()->user()->id)
+                                    ->orWhereHas('users', function ($query) {
+                                        return $query->where('users.id', auth()->user()->id);
+                                    });
                             });
                     });
             })
-            ->latest();
+            ->latest()
+            ->limit(5);
     }
+
 
     protected function getTableColumns(): array
     {

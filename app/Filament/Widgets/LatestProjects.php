@@ -19,7 +19,7 @@ class LatestProjects extends BaseWidget
 
     public function mount(): void
     {
-        self::$heading = __('Latest project activities');
+        self::$heading = __('Latest Project Activities');
     }
 
     public static function canView(): bool
