@@ -36,10 +36,16 @@ class ManageGeneralSettings extends SettingsPage
         return __('General');
     }
 
+    // protected static function getNavigationGroup(): ?string
+    // {
+    //     return __('Settings');
+    // }
     protected static function getNavigationGroup(): ?string
     {
-        return __('Settings');
+        return __('Setting');
     }
+
+    protected static ?int $navigationSort = 6;
 
     protected function getFormSchema(): array
     {
