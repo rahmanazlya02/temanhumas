@@ -6,12 +6,9 @@
     ];
 @endphp
 
-<!-- Parent Container -->
 <div class="flex flex-col gap-4"> 
-    <!-- Judul -->
-    <h2 class="text-lg font-bold text-gray-800">{{ $heading }}</h2>
+    <h2 class="text-lg font-bold text-gray-800 dark:text-white">{{ $heading }}</h2>
 
-    <!-- Grid -->
     <div class="grid grid-cols-{{ $columnSpan['sm'] }} sm:grid-cols-{{ $columnSpan['sm'] }} md:grid-cols-{{ $columnSpan['md'] }} lg:grid-cols-{{ $columnSpan['lg'] }} gap-4">
         <div class="col-span-full flex gap-4 justify-around">
             @foreach ($statuses as $status)
