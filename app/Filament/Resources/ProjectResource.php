@@ -51,60 +51,60 @@ class ProjectResource extends Resource
             ->schema([
                 Forms\Components\Card::make()
                     ->schema([
+                        // Grid utama
                         Forms\Components\Grid::make()
-                            ->columns(3)
+                            ->columns(['sm' => 1, 'lg' => 8]) // 1 kolom di mobile, 8 kolom di desktop
                             ->schema([
 
+                                // Sub-grid untuk nama proyek
                                 Forms\Components\Grid::make()
-                                    ->columnSpan(2)
+                                    ->columnSpan(['sm' => 12, 'lg' => 8]) // Responsif
                                     ->schema([
-                                        Forms\Components\Grid::make()
-                                            ->columnSpan(2)
-                                            ->columns(12)
-                                            ->schema([
-                                                Forms\Components\TextInput::make('name')
-                                                    ->label(__('Project name'))
-                                                    ->required()
-                                                    ->columnSpan(10)
-                                                    ->maxLength(255),
-                                            ]),
-
-                                        Forms\Components\Select::make('owner_id')
-                                            ->label(__('Project owner'))
-                                            ->searchable()
-                                            ->options(fn() => User::all()->pluck('name', 'id')->toArray())
-                                            ->default(fn() => auth()->user()->id)
-                                            ->required(),
-
-                                        Forms\Components\Select::make('status_id')
-                                            ->label(__('Project status'))
-                                            ->searchable()
-                                            ->options(fn() => ProjectStatus::all()->pluck('name', 'id')->toArray())
-                                            ->default(fn() => ProjectStatus::where('is_default', true)->first()?->id)
-                                            ->required(),
+                                        Forms\Components\TextInput::make('name')
+                                            ->label(__('Project name'))
+                                            ->required()
+                                            ->columnSpan(['sm' => 12, 'lg' => 8]) // Per baris di mobile
+                                            ->maxLength(255),
                                     ]),
 
+                                // Pemilik proyek
+                                Forms\Components\Select::make('owner_id')
+                                    ->label(__('Project owner'))
+                                    ->searchable()
+                                    ->options(fn() => User::all()->pluck('name', 'id')->toArray())
+                                    ->default(fn() => auth()->user()->id)
+                                    ->required()
+                                    ->columnSpan(['sm' => 12, 'lg' => 4]), // Responsif
+
+                                // Status proyek
+                                Forms\Components\Select::make('status_id')
+                                    ->label(__('Project status'))
+                                    ->searchable()
+                                    ->options(fn() => ProjectStatus::all()->pluck('name', 'id')->toArray())
+                                    ->default(fn() => ProjectStatus::where('is_default', true)->first()?->id)
+                                    ->required()
+                                    ->columnSpan(['sm' => 12, 'lg' => 4]), // Responsif
+
+                                // Deskripsi proyek
                                 Forms\Components\RichEditor::make('description')
                                     ->label(__('Project description'))
                                     ->required()
-                                    ->columnSpan(3),
+                                    ->columnSpan(['sm' => 12, 'lg' => 8]), // Responsif
 
-                                Forms\Components\Grid::make()
-                                    ->columns(3)
-                                    ->columnSpan(2)
-                                    ->schema([
-                                        Forms\Components\DateTimePicker::make('deadline')
-                                            ->label(__('Deadline'))
-                                            ->required()
-                                            ->reactive()
-                                            ->minDate(now()->format('Y-m-d'))  // Today's date as the minimum date
-                                            ->default(now()->setTime(0, 0))
-                                    ]),
+                                // Deadline
+                                Forms\Components\DateTimePicker::make('deadline')
+                                    ->label(__('Deadline'))
+                                    ->required()
+                                    ->reactive()
+                                    ->minDate(now()->format('Y-m-d')) // Tanggal minimum adalah hari ini
+                                    ->default(now()->setTime(0, 0))
+                                    ->columnSpan(['sm' => 12, 'lg' => 3]), // Responsif
                             ]),
 
                     ]),
             ]);
     }
+
 
     public static function table(Table $table): Table
     {
@@ -252,7 +252,7 @@ class ProjectResource extends Resource
                                     ->columns(TicketsRelationManager::table(new Table)->getColumns()) // Ambil kolom dari TicketsRelationManager
                             ])
                             ->label(__('Task List')),
-
+                      
                         // Users List
                         Forms\Components\Card::make()
                             ->schema([
