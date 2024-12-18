@@ -19,11 +19,15 @@ class GuidebookResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-collection';
 
-    protected static function getNavigationGroup(): ?string
+    protected static function getNavigationLabel(): string
     {
         return __('Guidebook');
     }
 
+    protected static function getNavigationGroup(): ?string
+    {
+        return __('Guideline');
+    }
 
     protected static ?int $navigationSort = 6;
 
