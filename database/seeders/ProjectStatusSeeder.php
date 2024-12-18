@@ -26,6 +26,12 @@ class ProjectStatusSeeder extends Seeder
             'is_default' => false,
             'order' => 3,
         ],
+        [
+            'name' => 'Approved',
+            'color' => '#058a91',
+            'is_default' => false,
+            'order' => 4
+        ],
     ];
 
     /**

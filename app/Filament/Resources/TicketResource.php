@@ -51,7 +51,9 @@ class TicketResource extends Resource
             ->schema([
                 Forms\Components\Card::make()
                     ->schema([
+                        // Grid Utama
                         Forms\Components\Grid::make()
+                            ->columns(['sm' => 1, 'lg' => 2]) // Responsif: 1 kolom di mobile, 2 kolom di desktop
                             ->schema([
                                 Forms\Components\Select::make('project_id')
                                     ->label(__('Project'))
@@ -97,87 +99,84 @@ class TicketResource extends Resource
                                     ->default(fn() => auth()->user()->id)
                                     ->required(),
 
-
                                 Forms\Components\Select::make('responsible_id')
                                     ->label(__('Task responsible'))
                                     ->searchable()
                                     ->required()
                                     ->options(fn() => User::all()->pluck('name', 'id')->toArray()),
-
-                                Forms\Components\Grid::make()
-                                    ->columns(3)
-                                    ->columnSpan(2)
-                                    ->schema([
-                                        Forms\Components\Select::make('status_id')
-                                            ->label(__('Task status'))
-                                            ->searchable()
-                                            ->options(function ($get) {
-                                                $project = Project::where('id', $get('project_id'))->first();
-                                                if ($project?->status_type === 'custom') {
-                                                    return TicketStatus::where('project_id', $project->id)
-                                                        ->get()
-                                                        ->pluck('name', 'id')
-                                                        ->toArray();
-                                                } else {
-                                                    return TicketStatus::whereNull('project_id')
-                                                        ->get()
-                                                        ->pluck('name', 'id')
-                                                        ->toArray();
-                                                }
-                                            })
-                                            ->default(function ($get) {
-                                                $project = Project::where('id', $get('project_id'))->first();
-                                                if ($project?->status_type === 'custom') {
-                                                    return TicketStatus::where('project_id', $project->id)
-                                                        ->where('is_default', true)
-                                                        ->first()
-                                                        ?->id;
-                                                } else {
-                                                    return TicketStatus::whereNull('project_id')
-                                                        ->where('is_default', true)
-                                                        ->first()
-                                                        ?->id;
-                                                }
-                                            })
-                                            ->required(),
-
-                                        Forms\Components\Select::make('type_id')
-                                            ->label(__('Task type'))
-                                            ->searchable()
-                                            ->options(fn() => TicketType::all()->pluck('name', 'id')->toArray())
-                                            ->default(fn() => TicketType::where('is_default', true)->first()?->id)
-                                            ->required(),
-
-                                        Forms\Components\Select::make('priority_id')
-                                            ->label(__('Task priority'))
-                                            ->searchable()
-                                            ->options(fn() => TicketPriority::all()->pluck('name', 'id')->toArray())
-                                            ->default(fn() => TicketPriority::where('is_default', true)->first()?->id)
-                                            ->required(),
-                                    ]),
                             ]),
 
+                        // Grid Task Status, Type, dan Priority
+                        Forms\Components\Grid::make()
+                            ->columns(['sm' => 1, 'lg' => 3]) // Responsif: 1 kolom di mobile, 3 kolom di desktop
+                            ->schema([
+                                Forms\Components\Select::make('status_id')
+                                    ->label(__('Task status'))
+                                    ->searchable()
+                                    ->options(function ($get) {
+                                        $project = Project::where('id', $get('project_id'))->first();
+                                        if ($project?->status_type === 'custom') {
+                                            return TicketStatus::where('project_id', $project->id)
+                                                ->get()
+                                                ->pluck('name', 'id')
+                                                ->toArray();
+                                        } else {
+                                            return TicketStatus::whereNull('project_id')
+                                                ->get()
+                                                ->pluck('name', 'id')
+                                                ->toArray();
+                                        }
+                                    })
+                                    ->default(function ($get) {
+                                        $project = Project::where('id', $get('project_id'))->first();
+                                        if ($project?->status_type === 'custom') {
+                                            return TicketStatus::where('project_id', $project->id)
+                                                ->where('is_default', true)
+                                                ->first()
+                                                ?->id;
+                                        } else {
+                                            return TicketStatus::whereNull('project_id')
+                                                ->where('is_default', true)
+                                                ->first()
+                                                ?->id;
+                                        }
+                                    })
+                                    ->required(),
+
+                                Forms\Components\Select::make('type_id')
+                                    ->label(__('Task type'))
+                                    ->searchable()
+                                    ->options(fn() => TicketType::all()->pluck('name', 'id')->toArray())
+                                    ->default(fn() => TicketType::where('is_default', true)->first()?->id)
+                                    ->required(),
+
+                                Forms\Components\Select::make('priority_id')
+                                    ->label(__('Task priority'))
+                                    ->searchable()
+                                    ->options(fn() => TicketPriority::all()->pluck('name', 'id')->toArray())
+                                    ->default(fn() => TicketPriority::where('is_default', true)->first()?->id)
+                                    ->required(),
+                            ]),
+
+                        // Rich Editor
                         Forms\Components\RichEditor::make('content')
                             ->label(__('Task Description'))
                             ->required()
-                            ->columnSpan(2),
+                            ->columnSpan(['sm' => 1, 'lg' => 2]),
 
+                        // Grid Deadline
                         Forms\Components\Grid::make()
-                            ->columns(3)
-                            ->columnSpan(2)
+                            ->columns(['sm' => 1, 'lg' => 3]) // Responsif: 1 kolom di mobile, 3 kolom di desktop
                             ->schema([
                                 Forms\Components\DateTimePicker::make('deadline')
                                     ->label(__('Deadline'))
                                     ->required()
                                     ->reactive()
-                                    ->minDate(now()->format('Y-m-d'))  // Today's date as the minimum date
+                                    ->minDate(now()->format('Y-m-d'))
                                     ->maxDate(function ($get) {
-                                        // Mengambil proyek terkait
                                         $project = Project::where('id', $get('project_id'))->first();
-                                        // Mengambil tanggal deadline proyek, jika ada
                                         return $project ? $project->deadline : now()->format('Y-m-d');
-                                    })
-                                // ->default(now()->setTime(0, 0))
+                                    }),
                             ]),
                     ]),
             ]);
