@@ -13,9 +13,17 @@ use Illuminate\Support\Str;
 class PermissionsSeeder extends Seeder
 {
     private array $modules = [
-        'permission', 'project', 'project status', 'role', 'ticket',
-        'ticket priority', 'ticket status', 'ticket type', 'user',
-        'activity', 'sprint'
+        'permission',
+        'project',
+        'project status',
+        'role',
+        'ticket',
+        'ticket priority',
+        'ticket status',
+        'ticket type',
+        'user',
+        'activity',
+        'sprint'
     ];
 
     private array $pluralActions = [
@@ -23,12 +31,17 @@ class PermissionsSeeder extends Seeder
     ];
 
     private array $singularActions = [
-        'View', 'Create', 'Update', 'Delete'
+        'View',
+        'Create',
+        'Update',
+        'Delete'
     ];
 
     private array $extraPermissions = [
-        'Manage general settings', 'Import from Jira',
-        'List timesheet data', 'View timesheet dashboard'
+        'Manage general settings',
+        'Import from Jira',
+        'List timesheet data',
+        'View timesheet dashboard'
     ];
 
     private string $defaultRole = 'Ketua Tim Humas';
@@ -91,7 +104,7 @@ class PermissionsSeeder extends Seeder
         $koordinator->syncPermissions([
             Permission::findByName('List projects'),
             Permission::findByName('View project'),
-            Permission::findByName('Edit project'),
+            Permission::findByName('Update project'),
             Permission::findByName('List tickets'),
             Permission::findByName('View ticket'),
             Permission::findByName('Create ticket'),
