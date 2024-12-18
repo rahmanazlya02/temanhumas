@@ -35,14 +35,14 @@ class TicketsByPriority extends DoughnutChartWidget
                     'label' => __('Tickets by priorities'),
                     'data' => $data->pluck('tickets_count')->toArray(),
                     'backgroundColor' => [
-                        'rgba(255, 99, 132, .6)',
-                        'rgba(54, 162, 235, .6)',
-                        'rgba(255, 205, 86, .6)'
+                        'rgba(0, 156, 0, 0.9)',
+                        'rgba(210, 182, 0, 0.9)',
+                        'rgba(219, 0, 15, 0.9)',
                     ],
                     'borderColor' => [
-                        'rgba(255, 99, 132, .8)',
-                        'rgba(54, 162, 235, .8)',
-                        'rgba(255, 205, 86, .8)'
+                        'rgb(5, 138, 5)',
+                        'rgb(177, 154, 5)',
+                        'rgb(190, 5, 17)',
                     ],
                     'hoverOffset' => 4
                 ]

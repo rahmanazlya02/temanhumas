@@ -35,14 +35,14 @@ class TicketsByType extends DoughnutChartWidget
                     'label' => __('Tickets by types'),
                     'data' => $data->pluck('tickets_count')->toArray(),
                     'backgroundColor' => [
-                        'rgba(255, 99, 132, .6)',
-                        'rgba(54, 162, 235, .6)',
-                        'rgba(255, 205, 86, .6)'
+                        'rgba(5, 138, 145, 0.9)',
+                        'rgba(182, 201, 9, 0.9)',
+                        'rgba(223, 64, 1, 0.9)	'
                     ],
                     'borderColor' => [
-                        'rgba(255, 99, 132, .8)',
-                        'rgba(54, 162, 235, .8)',
-                        'rgba(255, 205, 86, .8)'
+                        'rgb(7, 160, 168)',
+                        'rgb(204, 225, 13)',
+                        'rgb(199, 65, 12)	'
                     ],
                     'hoverOffset' => 4
                 ]
