@@ -31,21 +31,24 @@ return [
             'roles' => [
 
                 // Default role
-                'default' => 'employee',
+                'default' => 'anggota',
 
                 // Role that can manage
                 'can_manage' => 'administrator',
 
+                // Role that can complete
+                'can_complete' => ['administrator', 'koordinator'],
+
                 // Roles list
                 'list' => [
-                    'employee' => 'Staff',
-                    'coordinator' => 'Subtim Coordinator',
-                    'administrator' => 'Tim Leader'
+                    'anggota' => 'Anggota',
+                    'koordinator' => 'Koordinator Subtim',
+                    'administrator' => 'Ketua Tim Humas'
                 ],
 
                 // Roles colors
                 'colors' => [
-                    'primary' => 'employee',
+                    'primary' => 'staff',
                     'warning' => 'coordinator',
                     'danger' => 'administrator'
                 ],

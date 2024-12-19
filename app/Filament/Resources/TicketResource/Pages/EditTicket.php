@@ -22,4 +22,12 @@ class EditTicket extends EditRecord
             Actions\DeleteAction::make(),
         ];
     }
+
+    protected function afterSave(): void
+    {
+        // Arahkan pengguna ke halaman View Task
+        $this->redirect(
+            route('filament.resources.tickets.view', ['record' => $this->record->id])
+        );
+    }
 }

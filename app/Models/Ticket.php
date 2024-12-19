@@ -14,15 +14,25 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Illuminate\Support\Carbon;
 
 class Ticket extends Model implements HasMedia
 {
     use HasFactory, SoftDeletes, InteractsWithMedia;
 
     protected $fillable = [
-        'name', 'content', 'owner_id', 'responsible_id',
-        'status_id', 'project_id', 'code', 'order', 'type_id',
-        'priority_id', 'estimation', 'deadline','reminder', 'epic_id', 'sprint_id'
+        'name',
+        'content',
+        'owner_id',
+        'responsible_id',
+        'status_id',
+        'project_id',
+        'order',
+        'type_id',
+        'priority_id',
+        'deadline',
+        'reminder',
+        'epic_id'
     ];
 
     public static function boot()
@@ -33,17 +43,11 @@ class Ticket extends Model implements HasMedia
             $project = Project::where('id', $item->project_id)->first();
             $count = Ticket::where('project_id', $project->id)->count();
             $order = $project->tickets?->last()?->order ?? -1;
-            $item->code = $project->ticket_prefix . '-' . ($count + 1);
+            //$item->code = $project->ticket_prefix . '-' . ($count + 1);
             $item->order = $order + 1;
-        });
-
-        static::created(function (Ticket $item) {
-            if ($item->sprint_id && $item->sprint->epic_id) {
-                Ticket::where('id', $item->id)->update(['epic_id' => $item->sprint->epic_id]);
-            }
-            foreach ($item->watchers as $user) {
-                $user->notify(new TicketCreated($item));
-            }
+            if (empty($item->reminder) && !empty($item->deadline)) {
+                $item->reminder = Carbon::parse($item->deadline)->subHours(12);
+            };
         });
 
         static::updating(function (Ticket $item) {
@@ -63,13 +67,6 @@ class Ticket extends Model implements HasMedia
                 }
             }
 
-            // Ticket sprint update
-            $oldSprint = $old->sprint_id;
-            if ($oldSprint && !$item->sprint_id) {
-                Ticket::where('id', $item->id)->update(['epic_id' => null]);
-            } elseif ($item->sprint_id && $item->sprint->epic_id) {
-                Ticket::where('id', $item->id)->update(['epic_id' => $item->sprint->epic_id]);
-            }
         });
     }
 
@@ -121,7 +118,7 @@ class Ticket extends Model implements HasMedia
 
     public function reminders(): HasMany
     {
-    return $this->hasMany(Reminder::class, 'ticket_id', 'id');
+        return $this->hasMany(Reminder::class, 'ticket_id', 'id');
     }
 
     public function watchers(): Attribute
@@ -135,62 +132,6 @@ class Ticket extends Model implements HasMedia
                 }
                 return $users->unique('id');
             }
-        );
-    }
-
-    public function totalLoggedHours(): Attribute
-    {
-        return new Attribute(
-            get: function () {
-                $seconds = $this->hours->sum('value') * 3600;
-                return CarbonInterval::seconds($seconds)->cascade()->forHumans();
-            }
-        );
-    }
-
-    public function totalLoggedInHours(): Attribute
-    {
-        return new Attribute(
-            get: function () {
-                return $this->hours->sum('value');
-            }
-        );
-    }
-
-    public function estimationForHumans(): Attribute
-    {
-        return new Attribute(
-            get: function () {
-                return CarbonInterval::seconds($this->estimationInSeconds)->cascade()->forHumans();
-            }
-        );
-    }
-
-    public function estimationInSeconds(): Attribute
-    {
-        return new Attribute(
-            get: function () {
-                if (!$this->estimation) {
-                    return null;
-                }
-                return $this->estimation * 3600;
-            }
-        );
-    }
-
-    public function estimationProgress(): Attribute
-    {
-        return new Attribute(
-            get: function () {
-                return (($this->totalLoggedSeconds ?? 0) / ($this->estimationInSeconds ?? 1)) * 100;
-            }
-        );
-    }
-
-    public function completudePercentage(): Attribute
-    {
-        return new Attribute(
-            get: fn() => $this->estimationProgress
         );
     }
 }

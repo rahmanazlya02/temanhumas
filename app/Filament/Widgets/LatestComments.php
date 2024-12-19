@@ -24,7 +24,7 @@ class LatestComments extends BaseWidget
 
     public function mount(): void
     {
-        self::$heading = __('Latest tickets comments');
+        self::$heading = __('Latest Task Comments');
     }
 
     public static function canView(): bool
@@ -40,25 +40,29 @@ class LatestComments extends BaseWidget
     protected function getTableQuery(): Builder
     {
         return TicketComment::query()
-            ->limit(5)
             ->whereHas('ticket', function ($query) {
-                return $query->where('owner_id', auth()->user()->id)
-                    ->orWhere('responsible_id', auth()->user()->id)
-                    ->orWhereHas('project', function ($query) {
-                        return $query->where('owner_id', auth()->user()->id)
-                            ->orWhereHas('users', function ($query) {
-                                return $query->where('users.id', auth()->user()->id);
+                return $query->whereNull('deleted_at')
+                    ->where(function ($query) {
+                        $query->where('owner_id', auth()->user()->id)
+                            ->orWhere('responsible_id', auth()->user()->id)
+                            ->orWhereHas('project', function ($query) {
+                                return $query->where('owner_id', auth()->user()->id)
+                                    ->orWhereHas('users', function ($query) {
+                                        return $query->where('users.id', auth()->user()->id);
+                                    });
                             });
                     });
             })
-            ->latest();
+            ->latest()
+            ->limit(5);
     }
+
 
     protected function getTableColumns(): array
     {
         return [
             Tables\Columns\TextColumn::make('ticket')
-                ->label(__('Ticket'))
+                ->label(__('Task'))
                 ->formatStateUsing(function ($state) {
                     return new HtmlString('
                     <div class="flex flex-col gap-1">
@@ -66,10 +70,6 @@ class LatestComments extends BaseWidget
                             ' . $state->project->name . '
                         </span>
                         <span>
-                            <a href="' . route('filament.resources.tickets.share', $state->code)
-                        . '" target="_blank" class="text-primary-500 text-sm hover:underline">'
-                        . $state->code
-                        . '</a>
                             <span class="text-sm text-gray-400">|</span> '
                         . $state->name . '
                         </span>

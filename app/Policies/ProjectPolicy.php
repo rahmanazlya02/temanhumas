@@ -79,4 +79,23 @@ class ProjectPolicy
     {
         return $user->can('Delete project');
     }
+
+    /**
+    * Determine whether the user can mark the project as completed.
+    *
+    * @param \App\Models\User $user
+    * @param \App\Models\Project $project
+    * @return \Illuminate\Auth\Access\Response|bool
+    */
+    public function markAsCompleted(User $user, Project $project)
+    {
+        return $user->can('Mark as completed')
+            && (
+                $project->owner_id === $user->id
+                ||
+                $project->users()->where('users.id', $user->id)
+                    ->where('role', config('system.projects.affectations.roles.can_complete'))
+                    ->count()
+            );
+    }
 }

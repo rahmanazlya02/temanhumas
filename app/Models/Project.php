@@ -25,6 +25,17 @@ class Project extends Model implements HasMedia
         'cover'
     ];
 
+    // Boot method untuk menambahkan event deleting
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($project) {
+            // Hapus semua tiket terkait proyek ini
+            $project->tickets()->delete();
+        });
+    }
+
     public function owner(): BelongsTo
     {
         return $this->belongsTo(User::class, 'owner_id', 'id');
