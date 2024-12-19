@@ -6,16 +6,23 @@ use App\Models\Permission;
 use App\Models\Role;
 use App\Models\User;
 use App\Settings\GeneralSettings;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
 
 class PermissionsSeeder extends Seeder
 {
     private array $modules = [
-        'permission', 'project', 'project status', 'role', 'ticket',
-        'ticket priority', 'ticket status', 'ticket type', 'user',
-        'activity', 'sprint'
+        'permission',
+        'project',
+        'project status',
+        'role',
+        'ticket',
+        'ticket priority',
+        'ticket status',
+        'ticket type',
+        'user',
+        'activity',
+        'sprint'
     ];
 
     private array $pluralActions = [
@@ -23,19 +30,22 @@ class PermissionsSeeder extends Seeder
     ];
 
     private array $singularActions = [
-        'View', 'Create', 'Update', 'Delete'
+        'View', 'Create', 'Update', 'Delete', 'Mark as completed'
     ];
 
     private array $extraPermissions = [
-        'Manage general settings', 'Import from Jira',
-        'List timesheet data', 'View timesheet dashboard'
+        'Manage general settings',
+        'Import from Jira',
+        'List timesheet data',
+        'View timesheet dashboard'
     ];
 
     private string $defaultRole = 'Default role';
+    private string $koorTim = 'Koordinator Tim';
+    private string $anggotaTim = 'Anggota Tim';
 
-    private string $koordinatorRole = 'Koordinator';
+    private string $koordinatorRole = 'Koordinator Subtim';
     private string $anggotaRole = 'Anggota';
-
 
     /**
      * Run the database seeds.
@@ -44,7 +54,7 @@ class PermissionsSeeder extends Seeder
      */
     public function run()
     {
-        // Create profiles
+        // Create permissions for each module and action
         foreach ($this->modules as $module) {
             $plural = Str::plural($module);
             $singular = $module;
@@ -66,7 +76,12 @@ class PermissionsSeeder extends Seeder
             ]);
         }
 
-        // Create default role
+        // Ensure "Mark as completed" permission exists
+        Permission::firstOrCreate([
+            'name' => 'Mark as completed'
+        ]);
+
+        // Create and assign permissions to default role
         $role = Role::firstOrCreate([
             'name' => $this->defaultRole
         ]);
@@ -77,18 +92,31 @@ class PermissionsSeeder extends Seeder
         // Add all permissions to default role
         $role->syncPermissions(Permission::all()->pluck('name')->toArray());
 
-        // Assign default role to first database user
+        // Assign default role to the first user in the database
         if ($user = User::first()) {
             $user->syncRoles([$this->defaultRole]);
         }
-
 
         // Create default role
         $koordinator = Role::firstOrCreate([
             'name' => $this->koordinatorRole
         ]);
 
-        // Create default role
+        $koordinator->syncPermissions([
+            Permission::findByName('List projects'),
+            Permission::findByName('Mark as completed'), // Include "Mark as completed"
+            Permission::findByName('View project'),
+            Permission::findByName('Update project'),
+            Permission::findByName('List tickets'),
+            Permission::findByName('View ticket'),
+            Permission::findByName('Create ticket'),
+            Permission::findByName('Update ticket'),
+            Permission::findByName('Delete ticket'),
+            Permission::findByName('List timesheet data'),
+            Permission::findByName('View timesheet dashboard')
+        ]);
+
+        // Create and assign permissions to Anggota
         $anggota = Role::firstOrCreate([
             'name' => $this->anggotaRole
         ]);
@@ -97,7 +125,9 @@ class PermissionsSeeder extends Seeder
             Permission::findByName('List projects'),
             Permission::findByName('View project'),
             Permission::findByName('List tickets'),
-            Permission::findByName('View ticket')
+            Permission::findByName('View ticket'),
+            Permission::findByName('List timesheet data'),
+            Permission::findByName('View timesheet dashboard')
         ]);
     }
 }

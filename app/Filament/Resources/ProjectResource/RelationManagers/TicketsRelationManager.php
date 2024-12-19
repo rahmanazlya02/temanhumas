@@ -17,6 +17,10 @@ class TicketsRelationManager extends RelationManager
 
     protected static ?string $inverseRelationship = 'projects'; // Relasi terbalik (jika ada)
 
+    public static function getTitle(): string
+    {
+        return __('Tasks'); // Ganti label tasks
+    }
     public static function table(Table $table): Table
     {
         return $table

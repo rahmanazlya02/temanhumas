@@ -26,14 +26,14 @@ class TicketStatus extends Model
                 $query = TicketStatus::where('id', '<>', $item->id)
                     ->where('is_default', true);
                 if ($item->project_id) {
-                    $query->where('project_id', $item->project->id);
+                    $query->where('project_id', $item->project_id);
                 }
                 $query->update(['is_default' => false]);
             }
 
             $query = TicketStatus::where('order', '>=', $item->order)->where('id', '<>', $item->id);
             if ($item->project_id) {
-                $query->where('project_id', $item->project->id);
+                $query->where('project_id', $item->project_id);
             }
             $toUpdate = $query->orderBy('order', 'asc')
                 ->get();
@@ -48,13 +48,29 @@ class TicketStatus extends Model
         });
     }
 
+    /**
+     * Relasi ke tiket.
+     */
     public function tickets(): HasMany
     {
         return $this->hasMany(Ticket::class, 'status_id', 'id')->withTrashed();
     }
 
+    /**
+     * Relasi ke proyek.
+     */
     public function project(): BelongsTo
     {
         return $this->belongsTo(Project::class, 'project_id', 'id');
+    }
+
+    /**
+     * Hitung jumlah tiket berdasarkan status.
+     *
+     * @return int
+     */
+    public function getTicketCountAttribute(): int
+    {
+         return $this->tickets()->whereNull('deleted_at')->count();
     }
 }

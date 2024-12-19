@@ -52,11 +52,7 @@ class TicketTypeResource extends Resource
                                 Forms\Components\ColorPicker::make('color')
                                     ->label(__('Type color'))
                                     ->required(),
-
-                                IconPicker::make('icon')
-                                    ->label(__('Type icon'))
-                                    ->required(),
-
+                                    
                                 Forms\Components\Checkbox::make('is_default')
                                     ->label(__('Default type'))
                                     ->helperText(
@@ -78,11 +74,6 @@ class TicketTypeResource extends Resource
 
                 Tables\Columns\TextColumn::make('name')
                     ->label(__('Type name'))
-                    ->sortable()
-                    ->searchable(),
-
-                IconColumn::make('icon')
-                    ->label(__('Type icon'))
                     ->sortable()
                     ->searchable(),
 

@@ -200,10 +200,10 @@ trait KanbanScrumHelper
 
         // Tambahkan "Board - <Nama Proyek>" dengan nama proyek berwarna merah
         if ($this->project) {
-            $heading .= '<span style="font-size: 24px; font-weight: bold; color: black;">'
+            $heading .= '<span style="font-size: 24px; font-weight: bold; dark: text-white;">'
                 . __('Board') . ' - <span style="color: red;">' . $this->project->name . '</span></span>';
         } else {
-            $heading .= '<span style="font-size: 24px; font-weight: bold; color: black">'
+            $heading .= '<span style="font-size: 24px; font-weight: bold; dark: text-white;">'
                 . __('Board') . '</span>';
         }
 

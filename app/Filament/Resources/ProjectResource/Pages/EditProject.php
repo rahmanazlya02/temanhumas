@@ -32,4 +32,12 @@ class EditProject extends EditRecord
             Actions\DeleteAction::make(),
         ];
     }
+    
+    protected function afterSave(): void
+    {
+        // Arahkan pengguna ke halaman View Project
+        $this->redirect(
+            route('filament.resources.projects.view', ['record' => $this->record->id])
+        );
+    }
 }

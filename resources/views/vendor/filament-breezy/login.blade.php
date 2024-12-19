@@ -9,7 +9,7 @@
 
 <x-filament-breezy::auth-card action="authenticate" class="bg-custom-blue">
 
-    <div class="w-full flex justify-center mb-0">
+    <div class="w-full flex justify-center mb-0 text-white italic">
         <x-filament::brand />
     </div>
 
@@ -18,6 +18,18 @@
     </h2>
 
     @if (config('system.login_form.is_enabled'))
+        <div>
+            @if (config('filament-breezy.enable_registration'))
+                <p class="mt-2 text-sm text-center text-white">
+                    {{ __('filament-breezy::default.or') }}
+                    <a class="text-primary-600"
+                        href="{{ route(config('filament-breezy.route_group_prefix') . 'register') }}">
+                        {{ strtolower(__('filament-breezy::default.registration.heading')) }}
+                    </a>
+                </p>
+            @endif
+        </div>
+
         {{ $this->form }}
 
         <x-filament::button type="submit" class="w-full bg-blue-500">
