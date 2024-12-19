@@ -37,7 +37,7 @@ class WhatsappController extends Controller
                 "Nama Project: {$responsible_project->name}\n" .
                 "Deadline: {$task->deadline}\n\n" .
 
-                "Untuk detail tugas lebih lanjut, Silakan cek pada tautan http://temanhumas.xath.site\n\n" .
+                "Untuk detail tugas lebih lanjut, Silakan cek pada tautan https://temanhumas.xath.site\n\n" .
                 "Selamat mengerjakan tugas dan harap selesaikan tugasmu tepat waktu ya...!☺.";
 
 
