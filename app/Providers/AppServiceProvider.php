@@ -84,8 +84,8 @@ class AppServiceProvider extends ServiceProvider
     {
         try {
             $settings = app(GeneralSettings::class);
-            config(['app.locale' => 'id']);
-            Carbon::setLocale('id');
+            config(['app.locale' => 'en']);
+            Carbon::setLocale('en');
             Config::set('app.locale', $settings->site_language ?? config('app.fallback_locale'));
             Config::set('app.name', $settings->site_name ?? env('APP_NAME'));
             Config::set('filament.brand', $settings->site_name ?? env('APP_NAME'));

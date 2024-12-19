@@ -45,13 +45,38 @@ class Ticket extends Model implements HasMedia
             $order = $project->tickets?->last()?->order ?? -1;
             //$item->code = $project->ticket_prefix . '-' . ($count + 1);
             $item->order = $order + 1;
+            // if (empty($item->reminder) && !empty($item->deadline)) {
+            //     $item->reminder = Carbon::parse($item->deadline)->subHours(12);
+            // };
+            // Check if deadline is set and if it's within 12 hours from now
             if (empty($item->reminder) && !empty($item->deadline)) {
-                $item->reminder = Carbon::parse($item->deadline)->subHours(12);
-            };
+                $deadline = Carbon::parse($item->deadline);
+
+                // If deadline is within 12 hours from now, set reminder to the deadline
+                if ($deadline->diffInHours(Carbon::now()) < 12) {
+                    $item->reminder = $deadline; // Set reminder as the deadline
+                } else {
+                    // Optionally, you can set a default reminder time, e.g., 12 hours before the deadline
+                    $item->reminder = $deadline->subHours(12);
+                }
+            }
         });
 
         static::updating(function (Ticket $item) {
             $old = Ticket::where('id', $item->id)->first();
+
+            // Check if the deadline has changed or is being updated
+            if ($old->deadline !== $item->deadline && !empty($item->deadline)) {
+                $deadline = Carbon::parse($item->deadline);
+
+                // If deadline is within 12 hours from now, set reminder to the deadline
+                if ($deadline->diffInHours(Carbon::now()) < 12) {
+                    $item->reminder = $deadline; // Set reminder as the deadline
+                } else {
+                    // Optionally, set the reminder to 12 hours before the deadline
+                    $item->reminder = $deadline->subHours(12);
+                }
+            }
 
             // Ticket activity based on status
             $oldStatus = $old->status_id;
@@ -67,9 +92,16 @@ class Ticket extends Model implements HasMedia
                 }
             }
 
+
+
         });
     }
 
+    public function name():String
+    {
+        return $this->name;
+    }
+    
     public function owner(): BelongsTo
     {
         return $this->belongsTo(User::class, 'owner_id', 'id');

@@ -8,7 +8,9 @@ export default defineConfig({
                 'resources/css/filament.scss',
                 'resources/js/filament.js'
             ],
-            refresh: true,
+            refresh: [ 
+                'app/Http/Livewire/**',
+            ], 
         }),
     ],
 });

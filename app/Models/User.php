@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Notifications\UserCreatedNotification;
 use Devaslanphp\FilamentAvatar\Core\HasAvatarUrl;
+use Dotenv\Util\Str;
 use DutchCodingCompany\FilamentSocialite\Models\SocialiteUser;
 use Filament\Models\Contracts\FilamentUser;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -22,8 +23,14 @@ use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements MustVerifyEmail, FilamentUser
 {
-    use HasApiTokens, HasFactory, Notifiable, TwoFactorAuthenticatable,
-        HasRoles, HasAvatarUrl, SoftDeletes, MustVerifyNewEmail;
+    use HasApiTokens,
+        HasFactory,
+        Notifiable,
+        TwoFactorAuthenticatable,
+        HasRoles,
+        HasAvatarUrl,
+        SoftDeletes,
+        MustVerifyNewEmail;
 
     /**
      * The attributes that are mass assignable.
@@ -76,6 +83,17 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser
             }
         });
     }
+
+    // protected function name(): String
+    // {
+    //     return $this->name();
+    // }
+
+    // protected function whatsapp(): String
+    // {
+    //     return $this->whatsapp_number();
+    // }
+
 
     public function projectsOwning(): HasMany
     {
