@@ -36,6 +36,9 @@ return [
                 // Role that can manage
                 'can_manage' => 'administrator',
 
+                // Role that can complete
+                'can_complete' => ['administrator', 'koordinator'],
+
                 // Roles list
                 'list' => [
                     'anggota' => 'Anggota',
