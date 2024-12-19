@@ -21,8 +21,8 @@ class PermissionsSeeder extends Seeder
         'ticket status',
         'ticket type',
         'user',
-        'activity',
-        'sprint'
+        'activity'
+        //'sprint'
     ];
 
     private array $pluralActions = [
@@ -30,14 +30,15 @@ class PermissionsSeeder extends Seeder
     ];
 
     private array $singularActions = [
-        'View', 'Create', 'Update', 'Delete', 'Mark as completed'
+        'View', 'Create', 'Update', 'Delete'
     ];
 
     private array $extraPermissions = [
         'Manage general settings',
-        'Import from Jira',
+        //'Import from Jira',
         'List timesheet data',
-        'View timesheet dashboard'
+        'View timesheet dashboard',
+        'Mark as completed'
     ];
 
     private string $defaultRole = 'Ketua Tim Humas';
@@ -75,9 +76,9 @@ class PermissionsSeeder extends Seeder
         }
 
         // Ensure "Mark as completed" permission exists
-        Permission::firstOrCreate([
-            'name' => 'Mark as completed'
-        ]);
+        //Permission::firstOrCreate([
+            //'name' => 'Mark as completed'
+        //]);
 
         // Create and assign permissions to default role
         $role = Role::firstOrCreate([
