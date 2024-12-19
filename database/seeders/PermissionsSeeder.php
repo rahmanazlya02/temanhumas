@@ -41,9 +41,7 @@ class PermissionsSeeder extends Seeder
         'Mark as completed'
     ];
 
-    private string $defaultRole = 'Default role';
-    private string $koorTim = 'Koordinator Tim';
-    private string $anggotaTim = 'Anggota Tim';
+    private string $defaultRole = 'Ketua Tim Humas';
 
     private string $koordinatorRole = 'Koordinator Subtim';
     private string $anggotaRole = 'Anggota';
@@ -98,7 +96,7 @@ class PermissionsSeeder extends Seeder
             $user->syncRoles([$this->defaultRole]);
         }
 
-        // Create default role
+        // Create and assign permissions to Koordinator Subtim
         $koordinator = Role::firstOrCreate([
             'name' => $this->koordinatorRole
         ]);

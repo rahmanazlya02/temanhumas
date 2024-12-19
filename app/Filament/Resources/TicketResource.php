@@ -210,18 +210,18 @@ class TicketResource extends Resource
                     '))
                 ->searchable(),
 
-            // Tables\Columns\TextColumn::make('responsible.name')
-            //     ->label(__('Responsible'))
-            //     ->sortable()
-            //     ->formatStateUsing(fn($record) => new HtmlString('
-            //             <div class="flex items-center gap-2 mt-1">
-            //                 <span class="filament-tables-color-column relative flex h-6 w-6 rounded-full overflow-hidden">
-            //                     <img src="' . $record->responsible->avatar_url . '" alt="' . $record->responsible->name . '" class="object-cover h-full w-full">
-            //                 </span>
-            //                 <span>' . $record->responsible->name . '</span>
-            //             </div>
-            //         '))
-            //     ->searchable(),
+            Tables\Columns\TextColumn::make('responsible.name')
+                ->label(__('Responsible'))
+                ->sortable()
+                ->formatStateUsing(fn($record) => new HtmlString('
+                        <div class="flex items-center gap-2 mt-1">
+                            <span class="filament-tables-color-column relative flex h-6 w-6 rounded-full overflow-hidden">
+                                <img src="' . $record->responsible->avatar_url . '" alt="' . $record->responsible->name . '" class="object-cover h-full w-full">
+                            </span>
+                            <span>' . $record->responsible->name . '</span>
+                        </div>
+                    '))
+                ->searchable(),
 
             Tables\Columns\TextColumn::make('status.name')
                 ->label(__('Status'))

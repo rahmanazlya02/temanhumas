@@ -51,59 +51,60 @@ class ProjectResource extends Resource
             ->schema([
                 Forms\Components\Card::make()
                     ->schema([
+                        // Grid utama
                         Forms\Components\Grid::make()
-                            ->columns(3)
+                            ->columns(['sm' => 1, 'lg' => 8]) // 1 kolom di mobile, 8 kolom di desktop
                             ->schema([
 
+                                // Sub-grid untuk nama proyek
                                 Forms\Components\Grid::make()
-                                    ->columnSpan(2)
+                                    ->columnSpan(['sm' => 12, 'lg' => 8]) // Responsif
                                     ->schema([
-                                        Forms\Components\Grid::make()
-                                            ->columnSpan(2)
-                                            ->columns(12)
-                                            ->schema([
-                                                Forms\Components\TextInput::make('name')
-                                                    ->label(__('Project name'))
-                                                    ->required()
-                                                    ->columnSpan(10)
-                                                    ->maxLength(255),
-                                            ]),
-
-                                        Forms\Components\Select::make('owner_id')
-                                            ->label(__('Project owner'))
-                                            ->searchable()
-                                            ->options(fn() => User::all()->pluck('name', 'id')->toArray())
-                                            ->default(fn() => auth()->user()->id)
-                                            ->required(),
-
-                                        Forms\Components\Select::make('status_id')
-                                            ->label(__('Project status'))
-                                            ->searchable()
-                                            ->options(fn() => ProjectStatus::all()->pluck('name', 'id')->toArray())
-                                            ->default(fn() => ProjectStatus::where('is_default', true)->first()?->id)
-                                            ->required(),
+                                        Forms\Components\TextInput::make('name')
+                                            ->label(__('Project name'))
+                                            ->required()
+                                            ->columnSpan(['sm' => 12, 'lg' => 8]) // Per baris di mobile
+                                            ->maxLength(255),
                                     ]),
 
+                                // Pemilik proyek
+                                Forms\Components\Select::make('owner_id')
+                                    ->label(__('Project owner'))
+                                    ->searchable()
+                                    ->options(fn() => User::all()->pluck('name', 'id')->toArray())
+                                    ->default(fn() => auth()->user()->id)
+                                    ->required()
+                                    ->columnSpan(['sm' => 12, 'lg' => 4]), // Responsif
+
+                                // Status proyek
+                                Forms\Components\Select::make('status_id')
+                                    ->label(__('Project status'))
+                                    ->searchable()
+                                    ->options(fn() => ProjectStatus::all()->pluck('name', 'id')->toArray())
+                                    ->default(fn() => ProjectStatus::where('is_default', true)->first()?->id)
+                                    ->required()
+                                    ->columnSpan(['sm' => 12, 'lg' => 4]), // Responsif
+
+                                // Deskripsi proyek
                                 Forms\Components\RichEditor::make('description')
                                     ->label(__('Project description'))
-                                    ->columnSpan(3),
+                                    ->required()
+                                    ->columnSpan(['sm' => 12, 'lg' => 8]), // Responsif
 
-                                Forms\Components\Grid::make()
-                                    ->columns(3)
-                                    ->columnSpan(2)
-                                    ->schema([
-                                        Forms\Components\DateTimePicker::make('deadline')
-                                            ->label(__('Deadline'))
-                                            ->required()
-                                            ->reactive()
-                                            ->minDate(now()->format('Y-m-d'))  // Today's date as the minimum date
-                                            ->default(now()->setTime(0, 0))
-                                    ]),
+                                // Deadline
+                                Forms\Components\DateTimePicker::make('deadline')
+                                    ->label(__('Deadline'))
+                                    ->required()
+                                    ->reactive()
+                                    ->minDate(now()->format('Y-m-d')) // Tanggal minimum adalah hari ini
+                                    ->default(now()->setTime(0, 0))
+                                    ->columnSpan(['sm' => 12, 'lg' => 3]), // Responsif
                             ]),
 
                     ]),
             ]);
     }
+
 
     public static function table(Table $table): Table
     {
@@ -164,9 +165,40 @@ class ProjectResource extends Resource
                     ->options(fn() => Ticket::all()->pluck('deadline')->toArray()),
             ])
             ->actions([
-
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\Action::make('markAsComplete')
+                   
+                    ->label(fn($record) => $record->status_id === ProjectStatus::where('name', 'Completed')->first()?->id 
+                        ? __('Cancel Complete') 
+                        : __('Mark as Complete')) // Label berubah dinamis
+
+                    ->icon(fn($record) => $record->status_id === ProjectStatus::where('name', 'Completed')->first()?->id 
+                        ? 'heroicon-o-x-circle' 
+                        : 'heroicon-o-check-circle') // Ikon berubah dinamis
+                    ->color(fn($record) => $record->status_id === ProjectStatus::where('name', 'Completed')->first()?->id 
+                        ? 'danger' 
+                        : 'success') // Warna berubah dinamis
+                    ->action(function ($record) {
+                        $completedStatus = ProjectStatus::where('name', 'Completed')->first()?->id;
+                        $inProgressStatus = ProjectStatus::where('name', 'On Progress')->first()?->id;
+            
+                        if ($record->status_id === $completedStatus) {
+                            // Jika status "Completed", ubah menjadi "On Progress"
+                            $record->status_id = $inProgressStatus;
+                            Filament::notify('warning', __('The project completion has been canceled'));
+                        } else {
+                            // Jika status bukan "Completed", ubah menjadi "Completed"
+                            $record->status_id = $completedStatus;
+                            Filament::notify('success', __('The project has been marked as completed'));
+                        }
+            
+                        $record->save();
+                    })
+                    ->requiresConfirmation(fn($record) => $record->status_id === ProjectStatus::where('name', 'Completed')->first()?->id 
+                        ? __('Are you sure you want to revert this project to In Progress?') 
+                        : __('Are you sure you want to mark this project as completed?')) // Konfirmasi dinamis
+                    ->visible(fn() => Filament::auth()->user()->can('Mark as completed')), // Cek permission
 
                 Tables\Actions\ActionGroup::make([
                     Tables\Actions\Action::make('exportLogHours')
@@ -216,62 +248,7 @@ class ProjectResource extends Resource
         return [
             'index' => Pages\ListProjects::route('/'),
             'create' => Pages\CreateProject::route('/create'),
-            'view' => Pages\ViewProject::route('/{record}', function ($record) {
-                return [
-                    'components' => [
-                        // Informasi Project
-                        Forms\Components\Card::make()
-                            ->schema([
-                                Forms\Components\TextInput::make('name')
-                                    ->label(__('Project\'s Name'))
-                                    ->default($record->name)
-                                    ->disabled(),
-
-                                Forms\Components\TextInput::make('owner.name')
-                                    ->label(__('Project\'s Owner'))
-                                    ->default($record->owner->name)
-                                    ->disabled(),
-
-                                Forms\Components\TextInput::make('status.name')
-                                    ->label(__('Project\'s Status'))
-                                    ->default($record->status->name)
-                                    ->disabled(),
-
-                                Forms\Components\RichEditor::make('description')
-                                    ->label(__('Project\'s Description'))
-                                    ->default($record->description)
-                                    ->disabled(),
-                            ])
-                            ->columns(2), // Tampilkan dalam dua kolom untuk tata letak yang lebih baik
-
-                        // Task List (Tickets Relation)
-                        Forms\Components\Card::make()
-                            ->schema([
-                                Tables\Table::make()
-                                    ->columns(TicketsRelationManager::table(new Table)->getColumns()) // Ambil kolom dari TicketsRelationManager
-                            ])
-                            ->label(__('Task List')),
-
-                        // Users List
-                        Forms\Components\Card::make()
-                            ->schema([
-                                Tables\Table::make()
-                                    ->columns([
-                                        Tables\Columns\TextColumn::make('name')
-                                            ->label(__('User Full Name'))
-                                            ->sortable()
-                                            ->searchable(),
-                                        Tables\Columns\TextColumn::make('role')
-                                            ->label(__('User Role'))
-                                            ->sortable()
-                                            ->searchable(),
-                                    ])
-                                    ->rows(fn() => $record->users), // Ambil data pengguna terkait dari relasi
-                            ])
-                            ->label(__('Users')),
-                    ],
-                ];
-            }),
+            'view' => Pages\ViewProject::route('/{record}', function ($record) {}),
             'edit' => Pages\EditProject::route('/{record}/edit'),
         ];
     }
