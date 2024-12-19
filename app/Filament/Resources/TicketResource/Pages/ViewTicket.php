@@ -4,6 +4,7 @@ namespace App\Filament\Resources\TicketResource\Pages;
 
 use App\Exports\TicketHoursExport;
 use App\Filament\Resources\TicketResource;
+use App\Http\Controllers\WhatsappController;
 use App\Models\Activity;
 use App\Models\TicketComment;
 use App\Models\Ticket;
@@ -73,6 +74,16 @@ class ViewTicket extends ViewRecord implements HasForms
             Actions\EditAction::make(),
 
         ];
+    }
+    protected function afterSave(): void
+    {
+        // Dapatkan data task yang baru dibuat
+        $task = $this->record;
+
+        // Panggil controller untuk mengirimkan pesan
+        app(WhatsappController::class)->sendMessage($task);
+
+        dd("Sukses");
     }
 
     public function saveReminder(array $data): void
