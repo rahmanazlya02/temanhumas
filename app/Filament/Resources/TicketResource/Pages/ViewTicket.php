@@ -75,16 +75,6 @@ class ViewTicket extends ViewRecord implements HasForms
 
         ];
     }
-    protected function afterSave(): void
-    {
-        // Dapatkan data task yang baru dibuat
-        $task = $this->record;
-
-        // Panggil controller untuk mengirimkan pesan
-        app(WhatsappController::class)->sendMessage($task);
-
-        dd("Sukses");
-    }
 
     public function saveReminder(array $data): void
     {
