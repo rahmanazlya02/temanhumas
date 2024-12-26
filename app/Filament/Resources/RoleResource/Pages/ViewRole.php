@@ -14,6 +14,10 @@ class ViewRole extends ViewRecord
     {
         return [
             Actions\EditAction::make(),
+            Actions\ButtonAction::make('backToList')
+                ->label('Back to List Roles')
+                ->url(fn () => route('filament.resources.roles.index'))
+                ->color('secondary'), // Opsional: Anda bisa menyesuaikan warna tombol.
         ];
     }
 }

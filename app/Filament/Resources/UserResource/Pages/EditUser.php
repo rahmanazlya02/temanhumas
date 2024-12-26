@@ -17,4 +17,12 @@ class EditUser extends EditRecord
             Actions\DeleteAction::make(),
         ];
     }
+
+    protected function afterSave(): void
+    {
+        // Arahkan pengguna ke halaman View user
+        $this->redirect(
+            route('filament.resources.users.view', ['record' => $this->record->id])
+        );
+    }
 }

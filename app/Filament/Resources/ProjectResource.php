@@ -86,7 +86,7 @@ class ProjectResource extends Resource
                                     ->columnSpan(['sm' => 12, 'lg' => 4]), // Responsif
 
                                 // Deskripsi proyek
-                                Forms\Components\RichEditor::make('description')
+                                Forms\Components\Textarea::make('description')
                                     ->label(__('Project description'))
                                     ->required()
                                     ->columnSpan(['sm' => 12, 'lg' => 8]), // Responsif

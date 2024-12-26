@@ -26,24 +26,5 @@ class DefaultUserSeeder extends Seeder
             $user->save();
         }
 
-        $koorTim = User::create([
-            'name' => 'Upin',
-            'email' => 'upin@helper.app',
-            'password' => bcrypt('12345678'),
-            'email_verified_at' => now()
-        ]);
-        $koorTim->creation_token = null;
-        $koorTim->save();
-
-        $anggotaTim = User::create([
-            'name' => 'Ipin',
-            'email' => 'ipin@helper.app',
-            'password' => bcrypt('12345678'),
-            'email_verified_at' => now()
-        ]);
-        $anggotaTim->creation_token = null;
-        $anggotaTim->save();
-
-
     }
 }
