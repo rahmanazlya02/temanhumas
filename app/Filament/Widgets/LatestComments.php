@@ -7,6 +7,7 @@ use App\Models\Ticket;
 use App\Models\TicketComment;
 use Closure;
 use Filament\Forms\Components\RichEditor;
+use Filament\Forms\Components\Textarea;
 use Filament\Tables;
 use Filament\Widgets\TableWidget as BaseWidget;
 use Illuminate\Database\Eloquent\Builder;
@@ -97,7 +98,7 @@ class LatestComments extends BaseWidget
                 ->modalHeading(__('Comment details'))
                 ->modalButton(__('View ticket'))
                 ->form([
-                    RichEditor::make('content')
+                    Textarea::make('content')
                         ->label(__('Content'))
                         ->default(fn($record) => $record->content)
                         ->disabled()

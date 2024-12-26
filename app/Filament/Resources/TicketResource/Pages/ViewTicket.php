@@ -55,6 +55,10 @@ class ViewTicket extends ViewRecord implements HasForms
     protected function getActions(): array
     {
         return [
+            Actions\ButtonAction::make('backToList')
+                ->label('Back to List Tasks')
+                ->url(fn () => route('filament.resources.tickets.index'))
+                ->color('secondary'), // Opsional: Anda bisa menyesuaikan warna tombol.
             Actions\Action::make('setReminder')
                 ->label(__('Set Reminder'))
                 ->color('warning')
@@ -119,7 +123,7 @@ class ViewTicket extends ViewRecord implements HasForms
     protected function getFormSchema(): array
     {
         return [
-            RichEditor::make('comment')
+            Textarea::make('comment')
                 ->disableLabel()
                 ->placeholder(__('Type a new comment'))
                 ->required()

@@ -158,8 +158,7 @@ class TicketResource extends Resource
                                     ->required(),
                             ]),
 
-                        // Rich Editor
-                        Forms\Components\RichEditor::make('content')
+                        Forms\Components\TextArea::make('content')
                             ->label(__('Task Description'))
                             ->required()
                             ->columnSpan(['sm' => 1, 'lg' => 2]),
