@@ -48,8 +48,8 @@ return [
 
                 // Roles colors
                 'colors' => [
-                    'primary' => 'staff',
-                    'warning' => 'coordinator',
+                    'primary' => 'anggota',
+                    'warning' => 'koordinator',
                     'danger' => 'administrator'
                 ],
 

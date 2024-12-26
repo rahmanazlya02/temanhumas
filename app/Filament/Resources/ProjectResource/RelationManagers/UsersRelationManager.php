@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources\ProjectResource\RelationManagers;
 
+use App\Models\Ticket; // Pastikan model Ticket diimport
+use App\Models\User; // Import model User
 use Filament\Forms;
 use Filament\Resources\Form;
 use Filament\Resources\RelationManagers\RelationManager;
@@ -17,10 +19,19 @@ class UsersRelationManager extends RelationManager
 
     protected static ?string $inverseRelationship = 'projectsAffected';
 
-    public static function attach(Form $form): Form
+    public function mount(): void
     {
-        return $form
-            ->schema([]);
+        parent::mount();
+
+        // Ambil semua user dari ticket responsibles terkait dengan proyek ini
+        $tickets = Ticket::where('project_id', $this->ownerRecord->id)->get();
+
+        $usersFromTickets = $tickets->flatMap(function ($ticket) {
+            return $ticket->responsible; // Pastikan ada relasi `responsibles` di Ticket
+        });
+
+        // Sinkronisasi user ke proyek
+        $this->ownerRecord->users()->syncWithoutDetaching($usersFromTickets->pluck('id'));
     }
 
     public static function table(Table $table): Table
