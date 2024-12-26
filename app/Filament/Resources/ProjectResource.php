@@ -98,6 +98,7 @@ class ProjectResource extends Resource
                                     ->reactive()
                                     ->minDate(now()->format('Y-m-d')) // Tanggal minimum adalah hari ini
                                     ->default(now()->setTime(0, 0))
+                                    ->rules(['after_or_equal:now'])
                                     ->columnSpan(['sm' => 12, 'lg' => 3]), // Responsif
                             ]),
 
