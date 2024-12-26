@@ -26,6 +26,7 @@ use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Facades\Excel;
 use Filament\Forms\Components\DatePicker;
 use Illuminate\Support\Carbon;
+use Filament\Forms;
 
 class ViewTicket extends ViewRecord implements HasForms
 {
@@ -65,14 +66,18 @@ class ViewTicket extends ViewRecord implements HasForms
                 ->icon('heroicon-o-bell')
                 ->button()
                 ->form([
-                    DatePicker::make('reminderDate')
-                        ->label(__('Reminder Date'))
-                        ->minDate(now()->format('Y-m-d'))
-                        ->maxDate($this->record->deadline) // Asumsikan ada atribut `deadline` di tiket
-                        ->required(),
-                    TimePicker::make('reminderTime')
-                        ->label(__('Reminder Time'))
-                        ->required(),
+                    Forms\Components\Grid::make()
+                        ->columns(['sm' => 1, 'lg' => 2])
+                        ->schema([
+                            DatePicker::make('reminderDate')
+                                ->label(__('Reminder Date'))
+                                ->minDate(now()->format('Y-m-d'))
+                                ->maxDate($this->record->deadline) // Asumsikan ada atribut `deadline` di tiket
+                                ->required(),
+                            TimePicker::make('reminderTime')
+                                ->label(__('Reminder Time'))
+                                ->required(),
+                        ])
                 ])
                 ->action('saveReminder'),
             Actions\EditAction::make(),
@@ -87,6 +92,17 @@ class ViewTicket extends ViewRecord implements HasForms
             'Y-m-d H:i',
         $data['reminderDate'] . ' ' . Carbon::parse($data['reminderTime'])->format('H:i')
     );
+
+        // Validasi agar tidak berada di masa lalu
+        if ($reminderDateTime->isPast()) {
+            Notification::make()
+                ->title(('Invalid Reminder'))
+                ->body(('The reminder date and time cannot be in the past.'))
+                ->warning()
+                ->send();
+
+            return;
+        }
 
         // Validasi agar tidak melebihi deadline
         if ($reminderDateTime->greaterThan($this->record->deadline)) {
