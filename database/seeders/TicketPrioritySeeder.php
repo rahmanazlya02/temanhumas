@@ -10,17 +10,17 @@ class TicketPrioritySeeder extends Seeder
     private array $data = [
         [
             'name' => 'Low',
-            'color' => '#009c00',
+            'color' => 'rgba(72, 201, 117, 0.9)',
             'is_default' => false
         ],
         [
             'name' => 'Normal',
-            'color' => '#d2b600',
+            'color' => 'rgba(255, 204, 0, 0.9)',
             'is_default' => true
         ],
         [
             'name' => 'High',
-            'color' => '#db000f',
+            'color' => 'rgba(204, 36, 41, 0.9)',
             'is_default' => false
         ],
     ];

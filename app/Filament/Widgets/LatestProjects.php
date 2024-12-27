@@ -34,15 +34,32 @@ class LatestProjects extends BaseWidget
 
     protected function getTableQuery(): Builder
     {
-        return Project::query()
-            ->limit(5)
-            ->where(function ($query) {
-                return $query->where('owner_id', auth()->user()->id)
-                    ->orWhereHas('users', function ($query) {
-                        return $query->where('users.id', auth()->user()->id);
-                    });
+        $user = auth()->user();
+
+        $query = Project::query()->whereNull('deleted_at'); 
+
+        if ($user->hasRole('Ketua Tim Humas')) {
+            return $query->latest()->limit(5);
+        }
+
+        if ($user->hasRole('Koordinator Subtim')) {
+            return $query
+                ->where(function ($query) use ($user) {
+                    $query->where('owner_id', $user->id)
+                        ->orWhereHas('users', function ($query) use ($user) {
+                            $query->where('users.id', $user->id);
+                        });
+                })
+                ->latest()
+                ->limit(5);
+        }
+
+        return $query
+            ->whereHas('tickets', function ($query) use ($user) {
+                $query->where('responsible_id', $user->id);
             })
-            ->latest();
+            ->latest()
+            ->limit(5);
     }
 
     protected function getTableColumns(): array
