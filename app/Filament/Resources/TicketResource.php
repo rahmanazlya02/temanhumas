@@ -158,7 +158,7 @@ class TicketResource extends Resource
                                     ->required(),
                             ]),
 
-                        Forms\Components\TextArea::make('content')
+                        Forms\Components\Textarea::make('content')
                             ->label(__('Task Description'))
                             ->required()
                             ->columnSpan(['sm' => 1, 'lg' => 2]),

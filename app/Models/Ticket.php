@@ -91,9 +91,6 @@ class Ticket extends Model implements HasMedia
                     $user->notify(new TicketStatusUpdated($item));
                 }
             }
-
-
-
         });
     }
 
