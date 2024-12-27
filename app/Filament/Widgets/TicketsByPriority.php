@@ -28,21 +28,43 @@ class TicketsByPriority extends DoughnutChartWidget
 
     protected function getData(): array
     {
-        $data = TicketPriority::withCount('tickets')->get();
+        $user = auth()->user(); 
+        $query = TicketPriority::query()->withCount(['tickets' => function ($query) use ($user) {
+            $query->whereNull('deleted_at'); 
+            if ($user->hasRole('Ketua Tim Humas')) {
+                return; 
+            } elseif ($user->hasRole('Koordinator Subtim')) {
+                $query->where(function ($query) use ($user) {
+                    $query->where('responsible_id', $user->id)
+                        ->orWhere('owner_id', $user->id)
+                        ->orWhereHas('project', function ($query) use ($user) {
+                            $query->where('owner_id', $user->id)
+                                ->orWhereHas('users', function ($query) use ($user) {
+                                    $query->where('users.id', $user->id);
+                                });
+                        });
+                });
+            } elseif ($user->hasRole('Anggota')) {
+                $query->where('responsible_id', $user->id);
+            }
+        }]);
+    
+        $data = $query->get();
+
         return [
             'datasets' => [
                 [
                     'label' => __('Tickets by priorities'),
                     'data' => $data->pluck('tickets_count')->toArray(),
                     'backgroundColor' => [
-                        'rgba(0, 156, 0, 0.9)',
-                        'rgba(210, 182, 0, 0.9)',
-                        'rgba(219, 0, 15, 0.9)',
+                        'rgba(72, 201, 117, 0.9)',
+                        'rgba(255, 204, 0, 0.9)',
+                        'rgba(204, 36, 41, 0.9)',
                     ],
                     'borderColor' => [
-                        'rgb(5, 138, 5)',
-                        'rgb(177, 154, 5)',
-                        'rgb(190, 5, 17)',
+                        'rgba(72, 201, 117, 1)',
+                        'rgba(255, 204, 0, 1)',
+                        'rgba(204, 36, 41, 1)',
                     ],
                     'hoverOffset' => 4
                 ]

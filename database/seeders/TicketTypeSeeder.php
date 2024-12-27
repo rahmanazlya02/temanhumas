@@ -10,17 +10,17 @@ class TicketTypeSeeder extends Seeder
     private array $data = [
         [
             'name' => 'Protocol',
-            'color' => '#058A91',
+            'color' => 'rgba(32, 157, 182, 0.9)',
             'is_default' => true
         ],
         [
             'name' => 'Content Creator',
-            'color' => '#b6c909',
+            'color' => 'rgba(136, 84, 208, 0.9)',
             'is_default' => false
         ],
         [
             'name' => 'Event Organizer',
-            'color' => '#DF4001',
+            'color' => 'rgba(255, 178, 0, 0.9)',
             'is_default' => false
         ],
     ];
