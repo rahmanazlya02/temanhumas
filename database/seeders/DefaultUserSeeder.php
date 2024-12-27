@@ -25,5 +25,6 @@ class DefaultUserSeeder extends Seeder
             $user->creation_token = null;
             $user->save();
         }
+
     }
 }

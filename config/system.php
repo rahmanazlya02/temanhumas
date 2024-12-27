@@ -36,6 +36,9 @@ return [
                 // Role that can manage
                 'can_manage' => 'administrator',
 
+                // Role that can complete
+                'can_complete' => ['administrator', 'koordinator'],
+
                 // Roles list
                 'list' => [
                     'anggota' => 'Anggota',
@@ -45,8 +48,8 @@ return [
 
                 // Roles colors
                 'colors' => [
-                    'primary' => 'staff',
-                    'warning' => 'coordinator',
+                    'primary' => 'anggota',
+                    'warning' => 'koordinator',
                     'danger' => 'administrator'
                 ],
 

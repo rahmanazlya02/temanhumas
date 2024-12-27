@@ -1,7 +1,7 @@
 @section('head')
     <style>
         .bg-custom-blue {
-            background-color: #1E40AF;
+            background-color: #002B6A;
             /* Warna biru yang lebih gelap */
         }
     </style>
@@ -22,7 +22,7 @@
             @if (config('filament-breezy.enable_registration'))
                 <p class="mt-2 text-sm text-center text-white">
                     {{ __('filament-breezy::default.or') }}
-                    <a class="text-primary-600"
+                    <a class="text-primary-400 hover:text-white"
                         href="{{ route(config('filament-breezy.route_group_prefix') . 'register') }}">
                         {{ strtolower(__('filament-breezy::default.registration.heading')) }}
                     </a>
@@ -37,7 +37,7 @@
         </x-filament::button>
 
         <div class="text-center">
-            <a class="text-primary-600 hover:text-primary-700"
+            <a class="text-danger-600 hover:text-white"
                 href="{{ route(config('filament-breezy.route_group_prefix') . 'password.request') }}">{{ __('filament-breezy::default.login.forgot_password_link') }}</a>
         </div>
     @endif

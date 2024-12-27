@@ -13,6 +13,10 @@ class ViewProject extends ViewRecord
     protected function getActions(): array
     {
         return [
+            Actions\ButtonAction::make('backToList')
+                ->label('Back to List Projects')
+                ->url(fn () => route('filament.resources.projects.index'))
+                ->color('secondary'), // Opsional: Anda bisa menyesuaikan warna tombol.
             Actions\Action::make('kanban')
                 ->label(
                     fn ()
@@ -28,7 +32,7 @@ class ViewProject extends ViewRecord
                     }
                 }),
 
-            Actions\EditAction::make(),
+            Actions\EditAction::make(),  
         ];
     }
 }

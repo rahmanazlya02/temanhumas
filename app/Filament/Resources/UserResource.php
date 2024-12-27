@@ -70,6 +70,7 @@ class UserResource extends Resource
                                         fn($record) => 'unique:users,whatsapp_number,numeric'
                                             . ($record ? $record->id : 'NULL')
                                             . ',id,deleted_at,NULL'
+                                            . ($record && $record->whatsapp_number == $record->getOriginal('whatsapp_number') ? '|nullable' : '') // Allow no change
                                     )
                                     ->maxLength(12)
                                     ->helperText(__('Only enter 8******* without 62 (max 12 characters without space; eg:81234567891).')),

@@ -14,6 +14,10 @@ class ViewUser extends ViewRecord
     {
         return [
             Actions\EditAction::make(),
+            Actions\ButtonAction::make('backToList')
+                ->label('Back to List Users')
+                ->url(fn () => route('filament.resources.users.index'))
+                ->color('secondary'), // Opsional: Anda bisa menyesuaikan warna tombol.
         ];
     }
 }

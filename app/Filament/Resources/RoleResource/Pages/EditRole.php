@@ -17,4 +17,12 @@ class EditRole extends EditRecord
             Actions\DeleteAction::make(),
         ];
     }
+
+    protected function afterSave(): void
+    {
+        // Arahkan pengguna ke halaman View user
+        $this->redirect(
+            route('filament.resources.roles.view', ['record' => $this->record->id])
+        );
+    }
 }

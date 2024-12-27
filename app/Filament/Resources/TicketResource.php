@@ -158,8 +158,7 @@ class TicketResource extends Resource
                                     ->required(),
                             ]),
 
-                        // Rich Editor
-                        Forms\Components\RichEditor::make('content')
+                        Forms\Components\Textarea::make('content')
                             ->label(__('Task Description'))
                             ->required()
                             ->columnSpan(['sm' => 1, 'lg' => 2]),
@@ -173,6 +172,7 @@ class TicketResource extends Resource
                                     ->required()
                                     ->reactive()
                                     ->minDate(now()->format('Y-m-d'))
+                                    ->rules(['after_or_equal:now'])
                                     ->maxDate(function ($get) {
                                         $project = Project::where('id', $get('project_id'))->first();
                                         return $project ? $project->deadline : now()->format('Y-m-d');

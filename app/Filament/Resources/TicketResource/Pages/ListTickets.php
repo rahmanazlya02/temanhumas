@@ -26,16 +26,22 @@ class ListTickets extends ListRecords
 
     protected function getTableQuery(): Builder
     {
+        $user = auth()->user();
+
         return parent::getTableQuery()
-            ->where(function ($query) {
-                return $query->where('owner_id', auth()->user()->id)
-                    ->orWhere('responsible_id', auth()->user()->id)
-                    ->orWhereHas('project', function ($query) {
-                        return $query->where('owner_id', auth()->user()->id)
-                            ->orWhereHas('users', function ($query) {
-                                return $query->where('users.id', auth()->user()->id);
+            ->where(function ($query) use ($user) {
+                $query->where('responsible_id', $user->id) // Tiket yang menjadi tanggung jawabnya
+                    ->orWhere('owner_id', $user->id); // Tiket yang dia buat sendiri
+                
+                // Jika pengguna adalah ketua atau koordinator
+                if ($user->hasRole(['Ketua Tim Humas', 'Koordinator Subtim'])) {
+                    $query->orWhereHas('project', function ($projectQuery) use ($user) {
+                        $projectQuery->where('owner_id', $user->id) // Proyek yang dimiliki oleh pengguna
+                            ->orWhereHas('users', function ($usersQuery) use ($user) {
+                                $usersQuery->where('users.id', $user->id); // Proyek yang dia terlibat
                             });
                     });
+                }
             });
     }
 }

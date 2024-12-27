@@ -2,7 +2,7 @@
 <x-filament::page>
 
     <a href="{{ route('filament.pages.kanban/{project}', ['project' => $record->project->id]) }}"
-        class="flex items-center gap-1 text-gray-500 hover:text-gray-700 font-medium text-xs">
+        class="flex items-center gap-1 text-gray-500 hover:text-gray-700 font-medium text-xs dark:text-white">
         <x-heroicon-o-arrow-left class="w-4 h-4" /> {{ __('Back to kanban board') }}
     </a>
 
@@ -11,11 +11,11 @@
         <x-filament::card class="md:w-2/3 w-full flex flex-col gap-5">
             <div class="w-full flex flex-col gap-0">
                 <div class="flex items-center gap-2">
-                    <span class="flex items-center gap-1 text-sm text-gray-500">
+                    <span class="flex items-center gap-1 text-sm text-gray-500 dark:text-white">
                         {{ $record->project->name }}
                     </span>
                 </div>
-                <span class="text-xl text-gray-700">
+                <span class="text-xl text-gray-700 dark:text-white">
                     {{ $record->name }}
                 </span>
             </div>
@@ -36,10 +36,10 @@
                 </div>
             </div>
             <div class="w-full flex flex-col gap-0 pt-5">
-                <span class="text-gray-500 text-sm font-medium">
+                <span class="text-gray-500 text-sm font-medium dark:text-white">
                     {{ __('Description') }}
                 </span>
-                <div class="w-full prose">
+                <div class="w-full prose dark:text-white">
                     {!! $record->content !!}
                 </div>
             </div>
@@ -47,20 +47,20 @@
 
         <x-filament::card class="md:w-1/3 w-full flex flex-col">
             <div class="w-full flex flex-col gap-1" wire:ignore>
-                <span class="text-gray-500 text-sm font-medium">
+                <span class="text-gray-500 text-sm font-medium dark:text-white">
                     {{ __('Owner') }}
                 </span>
-                <div class="w-full flex items-center gap-1 text-gray-500">
+                <div class="w-full flex items-center gap-1 text-gray-500 dark:text-white">
                     <x-user-avatar :user="$record->owner" />
                     {{ $record->owner->name }}
                 </div>
             </div>
 
             <div class="w-full flex flex-col gap-1 pt-3" wire:ignore>
-                <span class="text-gray-500 text-sm font-medium">
+                <span class="text-gray-500 text-sm font-medium dark:text-white">
                     {{ __('Responsible') }}
                 </span>
-                <div class="w-full flex items-center gap-1 text-gray-500">
+                <div class="w-full flex items-center gap-1 text-gray-500 dark:text-white">
                     @if($record->responsible)
                     <x-user-avatar :user="$record->responsible" />
                     @endif
@@ -69,53 +69,53 @@
             </div>
 
             <div class="w-full flex flex-col gap-1 pt-3">
-                <span class="text-gray-500 text-sm font-medium">
+                <span class="text-gray-500 text-sm font-medium dark:text-white">
                     {{ __('Deadline') }}
                 </span>
-                <div class="w-full text-gray-500">
+                <div class="w-full text-gray-500 dark:text-white">
                     {{ \Carbon\Carbon::parse($record->deadline)->format(__('Y-m-d g:i A')) }}
-                    <span class="text-xs text-gray-400">
+                    <span class="text-xs text-gray-400 dark:text-white">
                         {{ \Carbon\Carbon::parse($record->deadline)->diffForHumans() }}
                     </span>
                 </div>
             </div>
 
             <div class="w-full flex flex-col gap-1 pt-3">
-                <span class="text-gray-500 text-sm font-medium">
+                <span class="text-gray-500 text-sm font-medium dark:text-white">
                     {{ __('Creation date') }}
                 </span>
-                <div class="w-full text-gray-500">
+                <div class="w-full text-gray-500 dark:text-white">
                     {{ $record->created_at->format(__('Y-m-d g:i A')) }}
-                    <span class="text-xs text-gray-400">
+                    <span class="text-xs text-gray-400 dark:text-white">
                         ({{ $record->created_at->diffForHumans() }})
                     </span>
                 </div>
             </div>
 
             <div class="w-full flex flex-col gap-1 pt-3">
-                <span class="text-gray-500 text-sm font-medium">
+                <span class="text-gray-500 text-sm font-medium dark:text-white">
                     {{ __('Last update') }}
                 </span>
-                <div class="w-full text-gray-500">
+                <div class="w-full text-gray-500 dark:text-white">
                     {{ $record->updated_at->format(__('Y-m-d g:i A')) }}
-                    <span class="text-xs text-gray-400">
+                    <span class="text-xs text-gray-400 dark:text-white">
                         ({{ $record->updated_at->diffForHumans() }})
                     </span>
                 </div>
             </div>
 
             <div class="w-full flex flex-col gap-1 pt-3">
-                <span class="text-gray-500 text-sm font-medium">
+                <span class="text-gray-500 text-sm font-medium dark:text-white">
                     {{ __('Reminder') }}
                 </span>
-                <div class="w-full text-gray-500">
+                <div class="w-full text-gray-500 dark:text-white">
                     @if($record->reminder)
                     {{ \Carbon\Carbon::parse($record->reminder)->format(__('Y-m-d g:i A')) }}
-                    <span class="text-xs text-gray-400">
+                    <span class="text-xs text-gray-400 dark:text-white">
                         ({{ \Carbon\Carbon::parse($record->reminder)->diffForHumans() }})
                     </span>
                     @else
-                    <span class="text-gray-400">{{ __('No reminder set') }}</span>
+                    <span class="text-gray-400 dark:text-white">{{ __('No reminder set') }}</span>
                     @endif
                 </div>
             </div>

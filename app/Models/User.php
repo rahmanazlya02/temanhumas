@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Notifications\UserCreatedNotification;
 use Devaslanphp\FilamentAvatar\Core\HasAvatarUrl;
+use Dotenv\Util\Str;
 use DutchCodingCompany\FilamentSocialite\Models\SocialiteUser;
 use Filament\Models\Contracts\FilamentUser;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -22,8 +23,14 @@ use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements MustVerifyEmail, FilamentUser
 {
-    use HasApiTokens, HasFactory, Notifiable, TwoFactorAuthenticatable,
-        HasRoles, HasAvatarUrl, SoftDeletes, MustVerifyNewEmail;
+    use HasApiTokens,
+        HasFactory,
+        Notifiable,
+        TwoFactorAuthenticatable,
+        HasRoles,
+        HasAvatarUrl,
+        SoftDeletes,
+        MustVerifyNewEmail;
 
     /**
      * The attributes that are mass assignable.
@@ -75,7 +82,35 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser
                 $item->notify(new UserCreatedNotification($item));
             }
         });
+
+        // static::deleting(function (User $user) {
+        //     // Cek apakah user adalah user dengan tipe 'db' (registrasi)
+        //     if ($user->type == 'db') {
+        //         // Force delete untuk pengguna yang terdaftar melalui registrasi
+        //         $user->socials()->forceDelete();  // Hapus permanen semua relasi sosial
+        //         $user->forceDelete();  // Hapus permanen pengguna utama
+        //     } else {
+        //         // Force delete untuk pengguna selain 'db' (misalnya pengguna tanpa socials)
+        //         $user->socials()->forceDelete();  // Hapus permanen relasi sosial
+        //         $user->forceDelete();  // Hapus permanen pengguna utama
+        //     }
+        // });
+    
+        // static::restoring(function (User $user) {
+        //     $user->socials()->restore(); // Restore socials saat user direstore
+        // });
     }
+
+    // protected function name(): String
+    // {
+    //     return $this->name();
+    // }
+
+    // protected function whatsapp(): String
+    // {
+    //     return $this->whatsapp_number();
+    // }
+
 
     public function projectsOwning(): HasMany
     {
