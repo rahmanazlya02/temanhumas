@@ -40,24 +40,36 @@ class LatestComments extends BaseWidget
 
     protected function getTableQuery(): Builder
     {
-        return TicketComment::query()
-            ->whereHas('ticket', function ($query) {
-                return $query->whereNull('deleted_at')
-                    ->where(function ($query) {
-                        $query->where('owner_id', auth()->user()->id)
-                            ->orWhere('responsible_id', auth()->user()->id)
-                            ->orWhereHas('project', function ($query) {
-                                return $query->where('owner_id', auth()->user()->id)
-                                    ->orWhereHas('users', function ($query) {
-                                        return $query->where('users.id', auth()->user()->id);
+        $user = auth()->user();
+
+        $query = TicketComment::query()->whereNull('deleted_at'); // Filter soft delete
+
+        if ($user->hasRole('Ketua Tim Humas')) {
+            return $query->latest()->limit(5); // Semua komentar
+        } elseif ($user->hasRole('Koordinator Subtim')) {
+            return $query
+                ->whereHas('ticket', function ($query) use ($user) {
+                    $query->where(function ($query) use ($user) {
+                        $query->where('owner_id', $user->id)
+                            ->orWhereHas('project', function ($query) use ($user) {
+                                $query->where('owner_id', $user->id)
+                                    ->orWhereHas('users', function ($query) use ($user) {
+                                        $query->where('users.id', $user->id);
                                     });
                             });
                     });
-            })
-            ->latest()
-            ->limit(5);
+                })
+                ->latest()
+                ->limit(5);
+        } else { // Anggota
+            return $query
+                ->whereHas('ticket', function ($query) use ($user) {
+                    $query->where('responsible_id', $user->id);
+                })
+                ->latest()
+                ->limit(5);
+        }
     }
-
 
     protected function getTableColumns(): array
     {
