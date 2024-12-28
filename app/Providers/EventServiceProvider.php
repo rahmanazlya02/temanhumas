@@ -21,9 +21,11 @@ class EventServiceProvider extends ServiceProvider
         ],
         SocialRegistered::class => [
             SocialRegistration::class
+        ],
+        \App\Events\TicketUpdated::class => [
+            \App\Listeners\TicketUpdatedListener::class,
         ]
     ];
-
     /**
      * Register any events for your application.
      *
