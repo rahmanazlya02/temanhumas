@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Illuminate\Support\Carbon;
+use App\Events\TicketUpdated;
 
 class Ticket extends Model implements HasMedia
 {
@@ -34,10 +35,29 @@ class Ticket extends Model implements HasMedia
         'reminder',
         'epic_id'
     ];
+    
 
     public static function boot()
     {
         parent::boot();
+
+        // Menyinkronkan user yang bertanggung jawab ketika task baru dibuat atau diupdate
+        static::saved(function ($ticket) {
+            // Trigger event setelah ticket disimpan
+            event(new TicketUpdated($ticket));
+        });
+        
+        // Menyinkronkan ketika task dihapus, hapus user yang bertanggung jawab dari project
+        static::deleted(function ($ticket) {
+            // Cek apakah ticket memiliki responsible_id dan project_id
+            if ($ticket->responsible_id && $ticket->project_id) {
+                // Ambil project terkait
+                $project = $ticket->project;
+
+                // Hapus user responsible dari project
+                $project->users()->detach($ticket->responsible_id);
+            }
+        });
 
         static::creating(function (Ticket $item) {
             $project = Project::where('id', $item->project_id)->first();
