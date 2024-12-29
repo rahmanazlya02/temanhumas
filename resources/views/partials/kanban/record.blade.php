@@ -1,7 +1,7 @@
 <div class="kanban-record" data-id="{{ $record['id'] }}">
-    <button type="button" class="handle">
+    <!-- <button type="button" class="handle">
         <x-heroicon-o-arrows-expand class="w-5 h-5" />
-    </button>
+    </button> -->
     <div class="record-info">
         @if($this->isMultiProject())
             <span class="record-subtitle">
