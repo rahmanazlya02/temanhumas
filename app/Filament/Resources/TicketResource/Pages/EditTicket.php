@@ -5,6 +5,7 @@ namespace App\Filament\Resources\TicketResource\Pages;
 use App\Filament\Resources\TicketResource;
 use Filament\Pages\Actions;
 use Filament\Resources\Pages\EditRecord;
+use App\Http\Controllers\WhatsappController;
 
 class EditTicket extends EditRecord
 {
@@ -13,6 +14,17 @@ class EditTicket extends EditRecord
     protected function getTitle(): string
     {
         return 'Edit Task';
+    }
+
+    protected function afterValidate(): void
+    {
+        // Dapatkan data task yang baru dibuat
+        $task = $this->record;
+
+        // Panggil controller untuk mengirimkan pesan
+        app(WhatsappController::class)->updateMessage($task);
+
+        // dd("Sukses");
     }
 
     protected function getActions(): array

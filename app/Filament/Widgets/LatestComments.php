@@ -115,10 +115,9 @@ class LatestComments extends BaseWidget
                         ->default(fn($record) => $record->content)
                         ->disabled()
                 ])
-                ->action(
-                    fn($record) =>
-                        redirect()->to(route('filament.resources.tickets.share', $record->ticket->code))
-                )
+                ->action(function ($record) {
+                    return redirect()->route('filament.resources.tickets.view',['record' => $record->id]);
+                }),
         ];
     }
 }
