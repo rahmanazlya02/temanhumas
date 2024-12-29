@@ -49,4 +49,38 @@ class WhatsappController extends Controller
         }
         return response()->json(['status' => 'error', 'message' => 'User not found'], 404);
     }
+
+    public function updateMessage(Ticket $task)
+    {
+
+
+        // $to = '+6289630912427'; // Nomor tujuan dengan format internasional
+        // $message = 'dari kiel';
+        // $response = $this->fonnteService->sendMessage($to, $message);
+        // $responsible_id = $task['responsible_id'];
+        $responsible_user = $task->responsible;
+        $responsible_project = $task->project;
+
+        if ($responsible_user) {
+
+            $assignedUser = $responsible_user;
+            $fonnteService = new FonnteService();
+            $message = "Halo {$assignedUser->name},\n\n" .
+                "Tugas Anda telah diperbarui, Berikut adalah perubahannya:\n" .
+                "Nama Tugas: {$task->name}\n" .
+                "Nama Project: {$responsible_project->name}\n" .
+                "Deadline: {$task->deadline}\n\n" .
+
+                "Untuk detail tugas lebih lanjut, Silakan cek pada tautan https://temanhumas.xath.site\n\n" .
+                "Selamat mengerjakan tugas dan harap selesaikan tugasmu tepat waktu ya...!☺.";
+
+
+            $whatsapp = '+62' . $assignedUser->whatsapp_number;
+
+            $response = $fonnteService->sendMessage($whatsapp, $message);
+
+            return response()->json($response);
+        }
+        return response()->json(['status' => 'error', 'message' => 'User not found'], 404);
+    }
 }

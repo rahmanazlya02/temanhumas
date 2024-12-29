@@ -20,7 +20,7 @@ class TicketTypeSeeder extends Seeder
         ],
         [
             'name' => 'Event Organizer',
-            'color' => 'rgba(255, 178, 0, 0.9)',
+            'color' => 'rgba(255, 119, 0, 0.86)',
             'is_default' => false
         ],
     ];

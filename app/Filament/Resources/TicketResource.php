@@ -235,11 +235,20 @@ class TicketResource extends Resource
                 ->sortable()
                 ->searchable(),
 
+            // Tables\Columns\TextColumn::make('type.name')
+            //     ->label(__('Type'))
+            //     ->formatStateUsing(
+            //         fn($record) => view('partials.filament.resources.ticket-type', ['state' => $record->type])
+            //     )
+            //     ->sortable()
+            //     ->searchable(),
             Tables\Columns\TextColumn::make('type.name')
                 ->label(__('Type'))
-                ->formatStateUsing(
-                    fn($record) => view('partials.filament.resources.ticket-type', ['state' => $record->type])
-                )
+                ->formatStateUsing(fn($record) => new HtmlString('
+                            <div class="flex items-center gap-2 mt-1">
+                                <span>' . $record->type->name . '</span>
+                            </div>
+                        '))
                 ->sortable()
                 ->searchable(),
 
