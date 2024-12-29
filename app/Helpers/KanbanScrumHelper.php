@@ -157,11 +157,37 @@ trait KanbanScrumHelper
     public function recordUpdated(int $record, int $newIndex, int $newStatus): void
     {
         $ticket = Ticket::find($record);
+
         if ($ticket) {
+            $user = auth()->user();
+            $currentStatus = $ticket->status_id;
+            // Cek jika status yang dipilih adalah "approved"
+            if ($newStatus == 4) { // Status approved
+
+                // Cek apakah user memiliki role ketua atau koordinator
+                if (!($user->hasRole('Ketua Tim Humas') || $user->hasRole('Koordinator Subtim'))) {
+                    // Tampilkan notifikasi error menggunakan Filament Notify
+                    Filament::notify('warning', __('Hanya ketua dan koordinator yang dapat memindahkan ke status approved.'));
+                    return; // Batalkan pemindahan jika role tidak valid
+                }
+            }
+
+            if ($currentStatus == 4 && $user->hasRole('Anggota')) {
+                // Tampilkan notifikasi error jika anggota mencoba memindahkan tugas dari status approved
+                Filament::notify('danger', __('Anda tidak dapat memindahkan tugas yang sudah approved.'));
+                return; // Batalkan pemindahan
+            }
+
+            // Memperbarui tiket
             $ticket->order = $newIndex;
             $ticket->status_id = $newStatus;
             $ticket->save();
-            Filament::notify('success', __('Ticket updated'));
+
+            // Tampilkan notifikasi sukses
+            Filament::notify('success', __('Ticket updated successfully!'));
+        } else {
+            // Tampilkan notifikasi error jika tiket tidak ditemukan
+            Filament::notify('warning', __('Ticket not found.'));
         }
     }
 

@@ -15,15 +15,28 @@
 
             height: calc(100vh);
 
+            /* Dark Mode */
+            @apply dark:bg-gray-800; /* Set the dark background color */
+            @apply dark:border-gray-600; /* Optional: Set border color in dark mode */
+            
             .create-record {
                 @apply flex items-center gap-1 mt-auto text-xs text-gray-500 p-3 bg-transparent hover:text-gray-600 hover:bg-gray-100 rounded;
+
+                /* Dark Mode for create-record button */
+                @apply dark:text-gray-300 dark:hover:text-gray-400 dark:hover:bg-gray-700;
             }
 
             .kanban-record {
                 @apply w-full flex flex-col gap-4 rounded bg-gray-50 border border-gray-200 p-3 hover:shadow hover:bg-gray-100 relative;
 
+                /* Dark Mode for kanban records */
+                @apply dark:bg-gray-700 dark:border-gray-600 dark:hover:bg-gray-600;
+
                 .handle {
                     @apply absolute top-0 right-0 text-gray-500 opacity-0 hover:cursor-pointer bg-gray-100 hover:bg-gray-200 rounded-bl p-2 transition;
+
+                    /* Dark Mode for handle */
+                    @apply dark:bg-gray-600 dark:text-gray-300 dark:hover:bg-gray-500;
                 }
 
                 &:hover {
@@ -41,6 +54,9 @@
 
                     .record-title {
                         @apply text-base text-gray-600 hover:cursor-pointer;
+
+                        /* Dark Mode untuk record-title */
+                        @apply dark:text-white; /* Set warna teks putih di dark mode */
 
                         .code {
                             @apply text-xs font-medium text-gray-400;
