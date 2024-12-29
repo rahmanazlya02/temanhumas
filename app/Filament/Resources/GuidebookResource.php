@@ -6,12 +6,16 @@ use App\Filament\Resources\GuidebookResource\Pages;
 use App\Filament\Resources\GuidebookResource\RelationManagers;
 use App\Models\Guidebook;
 use Filament\Forms;
+use Filament\Forms\Components\FileUpload;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
 use Filament\Tables;
+use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Storage;
+
 
 class GuidebookResource extends Resource
 {
@@ -36,6 +40,19 @@ class GuidebookResource extends Resource
         return $form
             ->schema([
                 //
+                Forms\Components\Card::make()
+                    ->schema([
+                        Forms\Components\TextInput::make('description')
+                            ->label('Deskripsi')
+                            ->required()
+                            ->maxLength(255),
+                        Forms\Components\FileUpload::make('file')
+                            ->enableDownload()
+                            ->preserveFilenames()
+                            ->label('Guidebook')
+                            ->directory('guidebooks') // Folder penyimpanan di storage/app/public/guidebooks
+                            ->required(),
+                    ]),
             ]);
     }
 
@@ -44,12 +61,19 @@ class GuidebookResource extends Resource
         return $table
             ->columns([
                 //
+                Tables\Columns\TextColumn::make('description')
+                    ->label('Deskripsi'),
+                Tables\Columns\TextColumn::make('file')
+                    ->label('Guidebook')
+                    ->url(fn($record) => Storage::url($record->file)) // Agar file bisa diakses publik
+                    ->openUrlInNewTab(), // Membuka file di tab baru
             ])
             ->filters([
                 //
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
