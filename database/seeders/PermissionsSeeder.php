@@ -38,7 +38,8 @@ class PermissionsSeeder extends Seeder
         //'Import from Jira',
         'List timesheet data',
         'View timesheet dashboard',
-        'Mark as completed'
+        'Mark as completed',
+        'Mark as approved' // Ditambahkan di sini
     ];
 
     private string $defaultRole = 'Ketua Tim Humas';
@@ -75,11 +76,6 @@ class PermissionsSeeder extends Seeder
             ]);
         }
 
-        // Ensure "Mark as completed" permission exists
-        //Permission::firstOrCreate([
-            //'name' => 'Mark as completed'
-        //]);
-
         // Create and assign permissions to default role
         $role = Role::firstOrCreate([
             'name' => $this->defaultRole
@@ -88,8 +84,20 @@ class PermissionsSeeder extends Seeder
         $settings->default_role = $role->id;
         $settings->save();
 
-        // Add all permissions to default role
-        $role->syncPermissions(Permission::all()->pluck('name')->toArray());
+        // Assign permissions to default role (Ketua Tim Humas)
+        $role->syncPermissions(array_merge(
+            Permission::whereIn('name', [
+                'Mark as approved', // Only this permission is included
+                'List projects',
+                'View project',
+                'Create project',
+                'Update project',
+                'Delete project'
+            ])->pluck('name')->toArray(),
+            Permission::all()->pluck('name')->diff([
+                'Mark as completed', // Exclude this permission
+            ])->toArray()
+        ));
 
         // Assign default role to the first user in the database
         if ($user = User::first()) {
@@ -102,8 +110,8 @@ class PermissionsSeeder extends Seeder
         ]);
 
         $koordinator->syncPermissions([
-            Permission::findByName('List projects'),
             Permission::findByName('Mark as completed'), // Include "Mark as completed"
+            Permission::findByName('List projects'),
             Permission::findByName('View project'),
             Permission::findByName('Update project'),
             Permission::findByName('List tickets'),
@@ -111,6 +119,7 @@ class PermissionsSeeder extends Seeder
             Permission::findByName('Create ticket'),
             Permission::findByName('Update ticket'),
             Permission::findByName('Delete ticket'),
+            Permission::findByName('List users'),
             Permission::findByName('List timesheet data'),
             Permission::findByName('View timesheet dashboard')
         ]);

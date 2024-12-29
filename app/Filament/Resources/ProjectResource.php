@@ -201,6 +201,37 @@ class ProjectResource extends Resource
                         : __('Are you sure you want to mark this project as completed?')) // Konfirmasi dinamis
                     ->visible(fn() => Filament::auth()->user()->can('Mark as completed')), // Cek permission
 
+                    Tables\Actions\Action::make('markAsApproved')
+                    ->label(fn($record) => $record->status_id === ProjectStatus::where('name', 'Approved')->first()?->id
+                        ? __('Cancel Approval')
+                        : __('Mark as Approved')) // Label berubah dinamis
+                    ->icon(fn($record) => $record->status_id === ProjectStatus::where('name', 'Approved')->first()?->id
+                        ? 'heroicon-o-x-circle'
+                        : 'heroicon-o-check-circle') // Ikon berubah dinamis
+                    ->color(fn($record) => $record->status_id === ProjectStatus::where('name', 'Approved')->first()?->id
+                        ? 'danger'
+                        : 'primary') // Warna berubah dinamis
+                    ->action(function ($record) {
+                        $approvedStatus = ProjectStatus::where('name', 'Approved')->first()?->id;
+                        $inProgressStatus = ProjectStatus::where('name', 'On Progress')->first()?->id;
+                
+                        if ($record->status_id === $approvedStatus) {
+                            // Jika status "Approved", ubah menjadi "On Progress"
+                            $record->status_id = $inProgressStatus;
+                            Filament::notify('warning', __('The project approval has been canceled'));
+                        } else {
+                            // Jika status bukan "Approved", ubah menjadi "Approved"
+                            $record->status_id = $approvedStatus;
+                            Filament::notify('success', __('The project has been marked as approved'));
+                        }
+                
+                        $record->save();
+                    })
+                    ->requiresConfirmation(fn($record) => $record->status_id === ProjectStatus::where('name', 'Approved')->first()?->id
+                        ? __('Are you sure you want to revert this project to In Progress?')
+                        : __('Are you sure you want to mark this project as approved?')) // Konfirmasi dinamis
+                    ->visible(fn() => Filament::auth()->user()->can('Mark as approved')), // Cek permission                
+
                 Tables\Actions\ActionGroup::make([
                     Tables\Actions\Action::make('exportLogHours')
                         ->label(__('Export hours'))
