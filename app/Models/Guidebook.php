@@ -13,5 +13,6 @@ class Guidebook extends Model
     protected $fillable = [
         'description',
         'file',
+        'google_drive_link',
     ];
 }

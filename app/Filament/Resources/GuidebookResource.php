@@ -3,7 +3,6 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\GuidebookResource\Pages;
-use App\Filament\Resources\GuidebookResource\RelationManagers;
 use App\Models\Guidebook;
 use Filament\Forms;
 use Filament\Forms\Components\FileUpload;
@@ -12,10 +11,7 @@ use Filament\Resources\Resource;
 use Filament\Resources\Table;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Storage;
-
 
 class GuidebookResource extends Resource
 {
@@ -35,56 +31,34 @@ class GuidebookResource extends Resource
 
     protected static ?int $navigationSort = 6;
 
+    /**
+     * Override the navigation URL to point to Google Drive.
+     */
+    public static function getNavigationUrl(): string
+    {
+        return 'https://drive.google.com/drive/folders/1xEwbFYnNu8vyCsJGgUMzw7BAgUnyyJxZ?usp=drive_link';
+    }
+
+    public static function getNavigationShouldOpenInNewTab(): bool
+    {
+        return true;
+    }
+
     public static function form(Form $form): Form
     {
         return $form
-            ->schema([
-                //
-                Forms\Components\Card::make()
-                    ->schema([
-                        Forms\Components\TextInput::make('description')
-                            ->label('Deskripsi')
-                            ->required()
-                            ->maxLength(255),
-                        Forms\Components\FileUpload::make('file')
-                            ->enableDownload()
-                            ->preserveFilenames()
-                            ->label('Guidebook')
-                            ->directory('guidebooks') // Folder penyimpanan di storage/app/public/guidebooks
-                            ->required(),
-                    ]),
-            ]);
+            ->schema([]);
     }
 
     public static function table(Table $table): Table
     {
         return $table
-            ->columns([
-                //
-                Tables\Columns\TextColumn::make('description')
-                    ->label('Deskripsi'),
-                Tables\Columns\TextColumn::make('file')
-                    ->label('Guidebook')
-                    ->url(fn($record) => Storage::url($record->file)) // Agar file bisa diakses publik
-                    ->openUrlInNewTab(), // Membuka file di tab baru
-            ])
-            ->filters([
-                //
-            ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
-            ])
-            ->bulkActions([
-                Tables\Actions\DeleteBulkAction::make(),
-            ]);
+            ->columns([]);
     }
 
     public static function getRelations(): array
     {
-        return [
-            //
-        ];
+        return [];
     }
 
     public static function getPages(): array
