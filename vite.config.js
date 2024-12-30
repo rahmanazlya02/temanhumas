@@ -8,9 +8,18 @@ export default defineConfig({
                 'resources/css/filament.scss',
                 'resources/js/filament.js'
             ],
-            refresh: [ 
+            refresh: [
                 'app/Http/Livewire/**',
-            ], 
+            ],
         }),
     ],
+    server: {
+        host: true, // Izinkan akses dari alamat IP atau domain
+        hmr: {
+            host: 'temanhumas.xath.site', // Ganti dengan domain Anda
+        },
+    },
+    build: {
+        outDir: 'public/build', // Sesuaikan output build Anda
+    },
 });
