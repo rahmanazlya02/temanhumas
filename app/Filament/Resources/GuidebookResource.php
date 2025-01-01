@@ -93,7 +93,7 @@ class GuidebookResource extends Resource
         return [
             'index' => Pages\ListGuidebooks::route('/'),
             'create' => Pages\CreateGuidebook::route('/create'),
-            'edit' => Pages\EditGuidebook::route('/{record}/edit'),
+            // 'edit' => Pages\EditGuidebook::route('/{record}/edit'),
         ];
     }
 }
