@@ -16,4 +16,12 @@ class EditGuidebook extends EditRecord
             Actions\DeleteAction::make(),
         ];
     }
+
+    // protected function afterSave(): void
+    // {
+    //     // Arahkan pengguna ke halaman View Task
+    //     $this->redirect(
+    //         route('filament.resources.guidebooks.list', ['record' => $this->record->id])
+    //     );
+    // }
 }

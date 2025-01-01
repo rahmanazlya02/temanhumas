@@ -13,13 +13,14 @@ export default defineConfig({
             ],
         }),
     ],
-    server: {
-        host: true, // Izinkan akses dari alamat IP atau domain
-        hmr: {
-            host: 'temanhumas.xath.site', // Ganti dengan domain Anda
-        },
-    },
-    build: {
-        outDir: 'public/build', // Sesuaikan output build Anda
-    },
+    //Aktifkan ini saat anda ingin menghosting website ini 
+    // server: {
+    //     host: true, // Izinkan akses dari alamat IP atau domain
+    //     hmr: {
+    //         host: 'temanhumas.xath.site', // Ganti dengan domain Anda
+    //     },
+    // },
+    // build: {
+    //     outDir: 'public/build', // Sesuaikan output build Anda
+    // },
 });

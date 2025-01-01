@@ -116,7 +116,7 @@ class LatestComments extends BaseWidget
                         ->disabled()
                 ])
                 ->action(function ($record) {
-                    return redirect()->route('filament.resources.tickets.view',['record' => $record->id]);
+                    return redirect()->route('filament.resources.tickets.view',['record' => $record->ticket->id]);
                 }),
         ];
     }
