@@ -18,4 +18,10 @@ class EditTicketStatus extends EditRecord
             Actions\DeleteAction::make(),
         ];
     }
+
+    protected function afterSave(): void
+    {
+        // Redirect to the "View Ticket Status" page
+        $this->redirect(TicketStatusResource::getUrl('view', ['record' => $this->record->id]));
+    }
 }

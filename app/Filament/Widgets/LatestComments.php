@@ -42,7 +42,10 @@ class LatestComments extends BaseWidget
     {
         $user = auth()->user();
 
-        $query = TicketComment::query()->whereNull('deleted_at'); // Filter soft delete
+        $query = TicketComment::query()
+        ->whereNull('deleted_at')
+        ->whereHas('ticket.project', function ($query) {
+            $query->whereNull('deleted_at');});
 
         if ($user->hasRole('Ketua Tim Humas')) {
             return $query->latest()->limit(5); // Semua komentar

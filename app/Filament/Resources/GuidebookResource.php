@@ -80,7 +80,8 @@ class GuidebookResource extends Resource
                     ->label(__('Link Guidebook'))
                     ->url(fn($record) => $record->google_drive_link, true) // Menambahkan link yang dapat diklik
                     ->openUrlInNewTab(), // Membuka link di tab baru
-            ]);
+            ])
+            ->bulkActions([]);
     }
 
     public static function getRelations(): array

@@ -184,10 +184,10 @@ trait KanbanScrumHelper
             $ticket->save();
 
             // Tampilkan notifikasi sukses
-            Filament::notify('success', __('Ticket updated successfully!'));
+            Filament::notify('success', __('Task updated successfully!'));
         } else {
             // Tampilkan notifikasi error jika tiket tidak ditemukan
-            Filament::notify('warning', __('Ticket not found.'));
+            Filament::notify('warning', __('Task not found.'));
         }
     }
 

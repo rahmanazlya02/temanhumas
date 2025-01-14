@@ -49,7 +49,7 @@
                                 {{ collect($user->ticketsResponsible ?? collect())
                                     ->unique('id')->count() }}
                             </span>
-                            <span>{{ __('Tickets') }}</span>
+                            <span>{{ __('Tasks') }}</span>
                         </div>
                     </li>
                     <li>
