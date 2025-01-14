@@ -26,5 +26,8 @@ class EditProjectStatus extends EditRecord
                 ->where('is_default', true)
                 ->update(['is_default' => false]);
         }
+
+        // Redirect to the "View Project Status" page
+        $this->redirect(ProjectStatusResource::getUrl('view', ['record' => $this->record->id]));
     }
 }

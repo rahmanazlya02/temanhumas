@@ -233,16 +233,16 @@ class ProjectResource extends Resource
                     ->visible(fn() => Filament::auth()->user()->can('Mark as approved')), // Cek permission                
 
                 Tables\Actions\ActionGroup::make([
-                    Tables\Actions\Action::make('exportLogHours')
-                        ->label(__('Export hours'))
-                        ->icon('heroicon-o-document-download')
-                        ->color('secondary')
-                        ->action(fn($record) => Excel::download(
-                            new ProjectHoursExport($record),
-                            'time_' . Str::slug($record->name) . '.csv',
-                            \Maatwebsite\Excel\Excel::CSV,
-                            ['Content-Type' => 'text/csv']
-                        )),
+                    // Tables\Actions\Action::make('exportLogHours')
+                    //     ->label(__('Export hours'))
+                    //     ->icon('heroicon-o-document-download')
+                    //     ->color('secondary')
+                    //     ->action(fn($record) => Excel::download(
+                    //         new ProjectHoursExport($record),
+                    //         'time_' . Str::slug($record->name) . '.csv',
+                    //         \Maatwebsite\Excel\Excel::CSV,
+                    //         ['Content-Type' => 'text/csv']
+                    //     )),
 
                     Tables\Actions\Action::make('kanban')
                         ->label(
@@ -261,7 +261,7 @@ class ProjectResource extends Resource
                 ])->color('secondary'),
             ])
             ->bulkActions([
-                Tables\Actions\DeleteBulkAction::make(),
+                // Tables\Actions\DeleteBulkAction::make(),
             ]);
     }
 

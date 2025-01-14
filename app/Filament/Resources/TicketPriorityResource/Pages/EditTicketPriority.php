@@ -26,5 +26,8 @@ class EditTicketPriority extends EditRecord
                 ->where('is_default', true)
                 ->update(['is_default' => false]);
         }
+
+         // Redirect to the "View Ticket Type" page
+         $this->redirect(TicketPriorityResource::getUrl('view', ['record' => $this->record->id]));
     }
 }
