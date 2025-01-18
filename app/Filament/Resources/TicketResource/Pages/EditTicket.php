@@ -16,16 +16,20 @@ class EditTicket extends EditRecord
         return 'Edit Task';
     }
 
-    protected function afterValidate(): void
-    {
+    //protected function afterValidate(): void
+    //{
+        
+        // Ambil ulang data record dari database
+        //$this->record = $this->record->refresh();
+        
         // Dapatkan data task yang baru dibuat
-        $task = $this->record;
+        //$task = $this->record;
 
         // Panggil controller untuk mengirimkan pesan
-        app(WhatsappController::class)->updateMessage($task);
+        //app(WhatsappController::class)->updateMessage($task);
 
         // dd("Sukses");
-    }
+    //}
 
     protected function getActions(): array
     {
@@ -37,6 +41,14 @@ class EditTicket extends EditRecord
 
     protected function afterSave(): void
     {
+        // Reload the record to ensure it reflects the latest state
+        $this->record->refresh();
+        // Dapatkan data task yang baru dibuat
+        $task = $this->record;
+
+        // Panggil controller untuk mengirimkan pesan
+        app(WhatsappController::class)->updateMessage($task);
+        
         // Arahkan pengguna ke halaman View Task
         $this->redirect(
             route('filament.resources.tickets.view', ['record' => $this->record->id])
