@@ -99,6 +99,18 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser
         // static::restoring(function (User $user) {
         //     $user->socials()->restore(); // Restore socials saat user direstore
         // });
+
+        static::deleting(function (User $user) {
+            // Hapus relasi yang terkait
+            $user->projectsOwning()->delete();
+            $user->ticketsOwned()->delete();
+            $user->ticketsResponsible()->delete();
+            //$user->hours()->delete();
+            //$user->socials()->delete();
+    
+            // Tambahkan entitas lain yang ingin dihapus
+            // Misalnya: $user->comments()->delete();
+            });
     }
 
     // protected function name(): String
