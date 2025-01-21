@@ -8,11 +8,15 @@ editor_options:
 
 ### Proyek RPL Kelompok 1 Kelas 3SD2
 
-**Disusun Oleh:** - Amir Mumtaz Siregar (222212493) - Arih Rahmawati
-(222212512) - Azizah Najla (222212531) - Meuthia Nazhifah Muthmainnah
-(222212729) - Muh. Alfian Amnur (222212736) - Nazlya Rahma Susanto
-(2222212787) - Sabastian Alfons Bahy (222212865) - Yoga Regita Hamzah
-Ashari (222212924)
+**Disusun Oleh:** 
+- Amir Mumtaz Siregar (222212493) 
+- Arih Rahmawati (222212512) 
+- Azizah Najla (222212531) 
+- Meuthia Nazhifah Muthmainnah (222212729) 
+- Muh. Alfian Amnur (222212736) 
+- Nazlya Rahma Susanto (2222212787) 
+- Sabastian Alfons Bahy (222212865) 
+- Yoga Regita Hamzah Ashari (222212924)
 
 ## Website : <https://temanhumas.xath.site>
 
@@ -174,7 +178,7 @@ STIS.
 >     -   **Email**:
 >         [temanhumas\@gmail.com](mailto:temanhumas@gmail.com){.email}
 >
->     -   **Password**: temanhumas01\*
+>     -   **Password**: temanhumas01*
 >
 > -   **Langkah 5**
 >
