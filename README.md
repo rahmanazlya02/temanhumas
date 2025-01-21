@@ -1,9 +1,3 @@
----
-editor_options: 
-  markdown: 
-    wrap: 72
----
-
 # INTERAKSI : Sistem Manajemen Kerja Tim Kehumasan dan Protokoler BPS Provinsi Kepulauan Riau (Teman Humas)
 
 ### Proyek RPL Kelompok 1 Kelas 3SD2
@@ -176,7 +170,7 @@ STIS.
 >     Kredensial pengguna default yang dibuat oleh seeder adalah:
 >
 >     -   **Email**:
->         [temanhumas\@gmail.com](mailto:temanhumas@gmail.com){.email}
+>         [temanhumas@gmail.com](mailto:temanhumas@gmail.com){.email}
 >
 >     -   **Password**: temanhumas01*
 >
