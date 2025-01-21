@@ -170,7 +170,7 @@ STIS.
 >     Kredensial pengguna default yang dibuat oleh seeder adalah:
 >
 >     -   **Email**:
->         [temanhumas\@gmail.com](mailto:temanhumas@gmail.com){.email}
+>         [temanhumas@gmail.com](mailto:temanhumas@gmail.com){.email}
 >
 >     -   **Password**: temanhumas01*
 >
