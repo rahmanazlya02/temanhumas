@@ -1,9 +1,3 @@
----
-editor_options: 
-  markdown: 
-    wrap: 72
----
-
 # INTERAKSI : Sistem Manajemen Kerja Tim Kehumasan dan Protokoler BPS Provinsi Kepulauan Riau (Teman Humas)
 
 ### Proyek RPL Kelompok 1 Kelas 3SD2
