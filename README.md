@@ -125,7 +125,7 @@ STIS.
 >     Kloning repositori ke localhost menggunakan perintah berikut:
 >
 >     ``` shell
->     git clone https://git.stis.ac.id/222212787/temanhumas.git
+>     git clone https://github.com/rahmanazlya02/temanhumas.git
 >     ```
 >
 > -   **Langkah 2**
