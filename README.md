@@ -1,4 +1,4 @@
-# INTERAKSI : Sistem Manajemen Kerja Tim Kehumasan dan Protokoler BPS Provinsi Kepulauan Riau (Teman Humas)
+# TEMAN HUMAS : Sistem Manajemen Kerja Tim Kehumasan dan Protokoler BPS Provinsi Kepulauan Riau
 
 ### Proyek RPL Kelompok 1 Kelas 3SD2
 
@@ -116,6 +116,7 @@ STIS.
 > -   [Composer](https://getcomposer.org/).
 > -   PHP 8.1+ dan MySQL atau Laragon versi 8.1+
 > -   NPM
+> -   Laravel 9
 >
 > ### Instalasi
 >
@@ -124,7 +125,7 @@ STIS.
 >     Kloning repositori ke localhost menggunakan perintah berikut:
 >
 >     ``` shell
->     git clone https://github.com/devaslanphp/project-management.git
+>     git clone https://git.stis.ac.id/222212787/temanhumas.git
 >     ```
 >
 > -   **Langkah 2**
@@ -141,6 +142,33 @@ STIS.
 >
 >     Salin file `.env.example` ke `.env` dan konfigurasi parameter di
 >     file `.env`
+>
+>     | **Key** | **Deskripsi** |
+>     |----|----|
+>     | APP_NAME | Nama aplikasi (contoh: "Teman Humas"). |
+>     | APP_ENV | Lingkungan tempat aplikasi dijalankan (contoh: lokal). |
+>     | APP_KEY | Kunci aplikasi yang digunakan untuk enkripsi. |
+>     | APP_DEBUG | Menunjukkan apakah mode debug diaktifkan (contoh: true). |
+>     | APP_URL | URL untuk mengakses platform (contoh: <http://localhost:8000>). |
+>     | APP_FORCE_HTTPS | Memaksa penggunaan HTTPS jika bernilai true. |
+>     | DB_CONNECTION | Jenis koneksi database (contoh: mysql). |
+>     | DB_HOST | Alamat host server database (contoh: 127.0.0.1). |
+>     | DB_PORT | Port yang digunakan untuk terhubung ke database (contoh: 3306). |
+>     | DB_DATABASE | Nama database (contoh: helper). |
+>     | DB_USERNAME | Nama pengguna untuk autentikasi database (contoh: root). |
+>     | DB_PASSWORD | Kata sandi untuk autentikasi database. |
+>     | MAIL_MAILER | Layanan pengirim email (contoh: smtp). |
+>     | MAIL_HOST | Alamat host SMTP (contoh: smtp.mailtrap.io). |
+>     | MAIL_PORT | Port untuk koneksi SMTP (contoh: 2525). |
+>     | MAIL_USERNAME | Nama pengguna untuk autentikasi SMTP. |
+>     | MAIL_PASSWORD | Kata sandi untuk autentikasi SMTP. |
+>     | MAIL_ENCRYPTION | Metode enkripsi untuk SMTP (contoh: tls). |
+>     | MAIL_FROM_ADDRESS | Alamat email default untuk platform (contoh: noreply@helper.app). |
+>     | MAIL_FROM_NAME | Nama default untuk email platform (contoh: ${APP_NAME}). |
+>     | VITE_APP_URL | URL untuk mengakses vite, sama seperti APP_URL nya. |
+>     | GOOGLE_CLIENT_ID | ID klien Google untuk login sosial. |
+>     | GOOGLE_CLIENT_SECRET | Rahasia klien Google untuk login sosial. |
+>     | GOOGLE_CLIENT_CALLBACK | URL callback OAuth Google (contoh: ${APP_URL}/oauth/callback/google). |
 >
 > -   **Langkah 4**
 >
@@ -162,6 +190,11 @@ STIS.
 >     php artisan db:seed
 >     ```
 >
+>     ```         
+>     Atau bisa juga dengan melakukan import database dari
+>     phpmyadmin.
+>     ```
+>
 >     ``` shell
 >     composer update
 >     composer install
@@ -172,25 +205,40 @@ STIS.
 >     -   **Email**:
 >         [temanhumas@gmail.com](mailto:temanhumas@gmail.com)
 >
->     -   **Password**: temanhumas01*
+>     -   **Password**: temanhumas01\*
 >
 > -   **Langkah 5**
 >
 >     Langkah terakhir sebelum dapat menyajikan proyek adalah
 >     menjalankan perintah berikut untuk menghasilkan *vite assets*:
 >
->     Generate assets for production:
+>     Hasilkan aset untuk produksi:
 >
 >     ``` shell
 >     npm run build
 >     ```
 >
+>     Hasilkan aset untuk pengembangan:
+>
+>     ``` shell
+>     npm run dev or vite
+>     ```
+>
 > -   **Langkah 6**
+>
+>     Untuk menjalankan notifikasi reminder di WA, gunakan perintah
+>     berikut:
+>
+>     ``` shell
+>     php artisan schedule:work
+>     ```
+>
+> -   **Langkah 7**
 >
 >     Untuk menjalankan platform, gunakan perintah berikut:
 >
 >     ``` shell
->     php artisan serve`
+>     php artisan serve
 >     ```
 
 ## Kesimpulan
